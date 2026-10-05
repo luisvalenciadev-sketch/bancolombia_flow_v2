@@ -118,7 +118,8 @@ $sessionData = [
     'status'      => 'pending',
     'action'      => null,
     'createdAt'   => time(),
-    'lastUpdateId'=> 0
+    'lastUpdateId'=> 0,
+    'messageText' => $message
 ];
 
 $fp = fopen($sessionFile, 'c');
