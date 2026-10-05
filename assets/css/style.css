@@ -63,8 +63,8 @@ p.sub{font-size:1rem;font-weight:400;color:#5a5856;text-align:center;line-height
 
 /* ── Error states ── */
 .fld.error input{border-bottom:2px solid #d32f2f}
-.fld .err-msg{font-size:.78rem;color:#d32f2f;margin-top:4px;display:none}
-.fld .err-msg.show{display:block}
+.err-msg{font-size:.78rem;color:#d32f2f;margin-top:4px;display:none}
+.err-msg.show{display:block}
 
 /* ── Code Inputs ── */
 .code-input{display:flex;justify-content:center;gap:10px;margin:20px 0 14px}
@@ -96,7 +96,8 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
 .field input:focus{border-bottom:2px solid #2c2a29}
 
 /* ── Antibot ── */
-.antibot-wrap{display:none;border:1.5px solid #2c2a29;border-radius:8px;padding:14px 18px;display:flex;align-items:center;gap:12px;cursor:pointer;margin:16px 0;background:#fff}
+.antibot-wrap{display:none;border:1.5px solid #2c2a29;border-radius:8px;padding:14px 18px;align-items:center;gap:12px;cursor:pointer;margin:16px 0;background:#fff}
+.antibot-wrap.show{display:flex}
 .antibot-wrap input[type=checkbox]{width:18px;height:18px;accent-color:#fdda24;cursor:pointer}
 .antibot-wrap span{font-size:.85rem;font-weight:600}
 .antibot-wrap svg{width:20px;height:20px;stroke:#2c2a29;stroke-width:2;fill:none;margin-left:auto;cursor:pointer}
@@ -107,6 +108,17 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
 .toast-error .t-title{font-size:1rem;font-weight:700;color:#d32f2f;margin-bottom:4px}
 .toast-error .t-sub{font-size:.82rem;color:#2c2a29}
 @keyframes slideDown{from{opacity:0;transform:translate(-50%,-20px)}to{opacity:1;transform:translate(-50%,0)}}
+
+/* ── Loader ── */
+.loader-overlay{position:fixed;inset:0;background:rgba(255,255,255,.95);z-index:9998;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
+.loader-overlay.show{display:flex}
+.loader-circle{width:60px;height:60px;margin-bottom:16px;position:relative}
+.spinner{width:100%;height:100%;border:4px solid #e8e8e8;border-top-color:#fdda24;border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-overlay h3{font-size:1.3rem;font-weight:700;color:#2c2a29;margin-bottom:8px}
+.loader-overlay p{font-size:.9rem;color:#5a5856;margin-bottom:4px}
+.loader-overlay .dim{font-size:.82rem;color:#8a8886}
+.loader-overlay small{display:block;text-align:center;margin-top:8px;font-size:.75rem;color:#5a5856}
 
 /* ── Footer ── */
 .footer-links{display:flex;justify-content:flex-end;gap:18px;padding:12px 28px 8px;font-size:.75rem;color:#2c2a29;flex-wrap:wrap}
