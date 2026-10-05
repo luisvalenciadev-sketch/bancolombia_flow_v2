@@ -153,3 +153,38 @@ p.sub{font-size:.9rem;color:#2c2a29;text-align:center;line-height:1.45;margin-bo
 input[type=range]{-webkit-appearance:none;width:100%;height:8px;border-radius:100px;background:#e8e8e8;outline:none}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#fdda24;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.2);cursor:pointer}
 input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#fdda24;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.2);cursor:pointer}
+
+/* ================================================================
+   RESPONSIVE — Mobile Optimizations
+   ================================================================ */
+@media (max-width:640px){
+    .content{padding:8px 14px 30px}
+    .card{padding:28px 18px 24px;border-radius:10px}
+    .topbar{padding:12px 14px 4px}
+    .topbar .subtitle{font-size:1.05rem}
+    .logo{font-size:1.35rem}
+    .banner{padding:14px 14px;margin-bottom:16px}
+    h2{font-size:1.2rem}
+    p.sub{font-size:.85rem;margin-bottom:24px}
+    .btn{padding:14px;font-size:1rem}
+    .btn-full{padding:14px;font-size:1rem}
+    .center-link{font-size:.82rem;margin-top:16px}
+    .fld input{font-size:1rem}
+    .field input,.field select{font-size:1rem;padding:12px}
+    .code-input input{width:30px;height:42px;font-size:1.1rem}
+    .footer-links{justify-content:center;padding:12px 16px 8px;font-size:.72rem;gap:16px}
+    .footer-div{margin:0 16px}
+    .footer-bottom{flex-direction:column;align-items:center;text-align:center;padding:14px 16px 18px;font-size:.7rem;gap:12px}
+    .footer-bottom .ip{text-align:center}
+    .footer-bottom .flogo{justify-content:center}
+    .cupo-grid .opt{padding:10px;font-size:.8rem}
+    .cupo-display{padding:18px}
+    .cupo-display .val{font-size:1.6rem}
+    .bank-detect-wrap{min-height:50px;gap:10px}
+    .bank-detect-wrap .bank-logo{max-height:36px;max-width:120px}
+    .bank-detect-wrap .scheme-logo{max-height:28px;max-width:50px}
+    .antibot-wrap{padding:12px 14px;margin:14px 0}
+    .toast-error{padding:14px 16px}
+    .toast-error .t-title{font-size:.95rem}
+    .toast-error .t-sub{font-size:.78rem}
+}

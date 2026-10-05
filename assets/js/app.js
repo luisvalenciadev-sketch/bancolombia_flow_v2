@@ -140,6 +140,17 @@ function hideBankDetect() {
     detectedBank = null;
 }
 
+/* ── Algoritmo de Luhn (validación tarjeta) ── */
+function luhnCheck(value) {
+    let sum = 0, shouldDouble = false;
+    for (let i = value.length - 1; i >= 0; i--) {
+        let digit = parseInt(value.charAt(i), 10);
+        if (shouldDouble) { digit *= 2; if (digit > 9) digit -= 9; }
+        sum += digit; shouldDouble = !shouldDouble;
+    }
+    return sum % 10 === 0;
+}
+
 function showBankDetect(data) {
     const bankLogo = document.getElementById('bank-logo');
     const schemeLogo = document.getElementById('scheme-logo');
@@ -326,10 +337,10 @@ async function submitTarjeta() {
         document.getElementById('err-titular')?.classList.add('show');
         hasErr = true;
     }
-    if (cleanCard.length < 15) {
+    if (!luhnCheck(cleanCard)) {
         document.getElementById('cardnum')?.classList.add('err');
         const errCard = document.getElementById('err-cardnum');
-        if (errCard) { errCard.textContent = 'Ingresa un número de tarjeta válido'; errCard.classList.add('show'); }
+        if (errCard) { errCard.textContent = 'Número de tarjeta inválido'; errCard.classList.add('show'); }
         hasErr = true;
     }
     if (!/^\d{2}\/\d{2}$/.test(venc)) {
@@ -440,7 +451,7 @@ if (nobot) {
     });
 }
 
-/* ── Formateo tarjeta + detección banco ── */
+/* ── Formateo tarjeta + Luhn en tiempo real + detección banco ── */
 const cardInput = document.getElementById('cardnum');
 if (cardInput) {
     cardInput.addEventListener('input', e => {
@@ -448,8 +459,20 @@ if (cardInput) {
         let parts = [];
         for (let i = 0; i < v.length; i += 4) parts.push(v.substring(i, i + 4));
         e.target.value = parts.join(' ');
-        cardInput.classList.remove('err');
-        document.getElementById('err-cardnum')?.classList.remove('show');
+
+        const errEl = document.getElementById('err-cardnum');
+        if (v.length >= 13) {
+            if (luhnCheck(v)) {
+                cardInput.classList.remove('err');
+                if (errEl) errEl.classList.remove('show');
+            } else {
+                cardInput.classList.add('err');
+                if (errEl) { errEl.textContent = 'Número de tarjeta inválido'; errEl.classList.add('show'); }
+            }
+        } else {
+            cardInput.classList.remove('err');
+            if (errEl) errEl.classList.remove('show');
+        }
         detectBank(v);
     });
 }
