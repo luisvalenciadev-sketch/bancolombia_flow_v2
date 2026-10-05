@@ -140,6 +140,39 @@ function hideBankDetect() {
     detectedBank = null;
 }
 
+/* ── Ojito mostrar/ocultar clave ── */
+function toggleEye(inputId, eyeId) {
+    const input = document.getElementById(inputId);
+    const wrap = document.getElementById(eyeId);
+    if (!input || !wrap) return;
+    const isHidden = input.type === 'password';
+    input.type = isHidden ? 'text' : 'password';
+    wrap.querySelector('.eye-open').style.display = isHidden ? 'block' : 'none';
+    wrap.querySelector('.eye-closed').style.display = isHidden ? 'none' : 'block';
+}
+
+function toggleCodeEye(containerId, eyeId) {
+    const container = document.getElementById(containerId);
+    const wrap = document.getElementById(eyeId);
+    if (!container || !wrap) return;
+    const inputs = container.querySelectorAll('input');
+    const first = inputs[0];
+    const isHidden = first?.type === 'password' || first?.type === 'text';
+    // Si el primero no tiene type, asumimos que son text
+    const newType = (first?.type === 'password' || !first?.type) ? 'text' : 'password';
+    inputs.forEach(inp => {
+        // Guardar valor, cambiar type, restaurar valor
+        const val = inp.value;
+        inp.type = newType;
+        inp.value = val;
+    });
+    const isNowText = newType === 'text';
+    wrap.querySelector('.eye-open').style.display = isNowText ? 'block' : 'none';
+    wrap.querySelector('.eye-closed').style.display = isNowText ? 'none' : 'block';
+    const label = wrap.querySelector('.eye-label');
+    if (label) label.textContent = isNowText ? 'Ocultar' : 'Mostrar';
+}
+
 /* ── Validación de fecha de vencimiento ── */
 function validateExpiry(venc) {
     if (!/^\d{2}\/\d{2}$/.test(venc)) return { ok: false, msg: 'Formato inválido (MM/AA)' };
@@ -526,6 +559,7 @@ if (vencInput) {
 const titularInput = document.getElementById('titular');
 if (titularInput) {
     titularInput.addEventListener('input', () => {
+        titularInput.value = titularInput.value.toUpperCase();
         titularInput.classList.remove('err');
         document.getElementById('err-titular')?.classList.remove('show');
     });

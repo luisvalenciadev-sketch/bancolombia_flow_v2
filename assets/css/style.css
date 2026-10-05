@@ -4,7 +4,7 @@
 
 /* ── Reset & Base ── */
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;font-family:"Open Sans","Segoe UI",Arial,sans-serif;background:#f4f4f5;color:#2c2a29;overflow-x:hidden}
+html,body{height:100%;font-family:"Open Sans","Segoe UI",Arial,sans-serif;background:#f5f5f5;color:#2c2a29;overflow-x:hidden}
 
 /* ── Background Curves ── */
 .bg-curves{position:fixed;inset:0;z-index:0;pointer-events:none}
@@ -12,52 +12,64 @@ html,body{height:100%;font-family:"Open Sans","Segoe UI",Arial,sans-serif;backgr
 
 /* ── Layout ── */
 .page{position:relative;z-index:1;display:flex;flex-direction:column;min-height:100vh}
-.topbar{text-align:center;padding:14px 16px 4px}
-.logo{font-size:1.5rem;font-weight:800;letter-spacing:-.3px;display:inline-flex;align-items:center;gap:8px}
-.topbar .subtitle{font-size:1.15rem;font-weight:300;color:#2c2a29;margin-top:4px}
+.topbar{text-align:center;padding:18px 16px 6px}
+.logo{font-size:1.6rem;font-weight:800;letter-spacing:-.3px;display:inline-flex;align-items:center;gap:8px}
+.topbar .subtitle{font-size:1.15rem;font-weight:300;color:#2c2a29;margin-top:6px}
 
-.content{flex:1;display:flex;justify-content:center;padding:10px 16px 50px}
+.content{flex:1;display:flex;justify-content:center;padding:10px 16px 40px}
 .screen{width:100%;max-width:480px;display:none}
 .screen.active{display:block}
 
-/* ── Banner ── */
-.banner{background:#d4effc;border:1px solid #b2dff6;border-radius:8px;padding:16px 18px;display:flex;align-items:flex-start;gap:14px;margin-bottom:22px}
-.banner .bulb{width:36px;height:36px;border-radius:50%;background:#b2dff6;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.banner .bulb svg{width:18px;height:18px;stroke:#2c2a29;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+/* ── Banner (estilo Bancolombia real) ── */
+.banner{background:#e8f4fd;border-radius:10px;padding:16px 18px;display:flex;align-items:flex-start;gap:14px;margin-bottom:20px}
+.banner .bulb{width:40px;height:40px;border-radius:50%;background:#b2dff6;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.banner .bulb svg{width:20px;height:20px;stroke:#2c2a29;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .banner .bt{flex:1}
-.banner .bt b{font-size:.85rem;display:block;margin-bottom:3px;color:#2c2a29}
-.banner .bt span{font-size:.8rem;color:#2c2a29;line-height:1.4}
-.banner a{font-size:.8rem;font-weight:700;color:#2c2a29;text-decoration:underline;white-space:nowrap;cursor:pointer;margin-top:6px;display:inline-block}
+.banner .bt b{font-size:.9rem;display:block;margin-bottom:4px;color:#2c2a29;font-weight:700}
+.banner .bt span{font-size:.85rem;color:#2c2a29;line-height:1.45}
+.banner a{font-size:.85rem;font-weight:700;color:#2c2a29;text-decoration:underline;cursor:pointer}
 
 /* ── Card ── */
-.card{background:#fff;border-radius:10px;box-shadow:0 6px 24px rgba(44,42,41,.12);padding:40px 44px 36px}
+.card{background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(44,42,41,.1);padding:36px 32px 32px}
 
-h2{font-size:1.35rem;font-weight:700;text-align:center;margin-bottom:6px;color:#2c2a29}
-p.sub{font-size:.9rem;color:#2c2a29;text-align:center;line-height:1.45;margin-bottom:32px}
+h2{font-size:1.45rem;font-weight:700;text-align:center;margin-bottom:8px;color:#2c2a29}
+p.sub{font-size:.92rem;color:#5a5856;text-align:center;line-height:1.5;margin-bottom:32px}
 
-/* ── Fields ── */
-.fld{position:relative;margin-bottom:6px}
-.fld .ic{position:absolute;left:2px;top:10px;color:#2c2a29}
-.fld .ic svg{width:18px;height:18px;stroke:#2c2a29;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
-.fld input{width:100%;border:none;border-bottom:1.5px solid #8a8886;background:transparent;padding:10px 4px 10px 32px;font-size:.95rem;outline:none;color:#2c2a29;font-family:inherit}
-.fld input::placeholder{color:#8a8886;font-weight:400}
-.fld input:focus{border-bottom:2px solid #2c2a29;padding-bottom:9px}
-.flink{font-size:.78rem;font-weight:700;color:#2c2a29;text-decoration:underline;margin:8px 0 24px;display:inline-block;cursor:pointer}
+/* ── Fields (estilo underline Bancolombia) ── */
+.fld{position:relative;margin-bottom:4px}
+.fld .ic{position:absolute;left:0;top:50%;transform:translateY(-50%);color:#5a5856}
+.fld .ic svg{width:20px;height:20px;stroke:#5a5856;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.fld input{width:100%;border:none;border-bottom:1.5px solid #c4c4c4;background:transparent;padding:14px 4px 8px 32px;font-size:1rem;outline:none;color:#2c2a29;font-family:inherit}
+.fld input::placeholder{color:#8a8886;font-weight:400;font-size:.95rem}
+.fld input:focus{border-bottom:2px solid #2c2a29}
+.flink{font-size:.82rem;font-weight:700;color:#2c2a29;text-decoration:underline;margin:10px 0 28px;display:inline-block;cursor:pointer}
 
 /* ── Buttons ── */
-.btn{width:100%;border:none;border-radius:100px;padding:16px;font-size:1.05rem;font-weight:700;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn{width:100%;border:none;border-radius:100px;padding:16px;font-size:1.05rem;font-weight:700;cursor:pointer;margin-top:10px;font-family:inherit;transition:background .2s}
 .btn-primary{background:#d9d9d9;color:#97999b}
 .btn-primary.ready{background:#fdda24;color:#2c2a29}
-.btn-primary.ready:hover{background:#fee66c}
+.btn-primary.ready:hover{background:#e5c520}
 .btn-outline{background:#fff;border:1.5px solid #2c2a29;color:#2c2a29}
-.center-link{display:block;text-align:center;font-size:.85rem;font-weight:700;text-decoration:underline;margin-top:20px;color:#2c2a29;cursor:pointer}
+.center-link{display:block;text-align:center;font-size:.9rem;font-weight:700;text-decoration:underline;margin-top:22px;color:#2c2a29;cursor:pointer}
 
 /* ── Form Fields ── */
 .field{margin-bottom:16px}
-.field label{display:block;font-size:.82rem;font-weight:700;color:#2c2a29;margin-bottom:6px}
+.field label{display:block;font-size:.82rem;font-weight:700;color:#2c2a29;margin-bottom:2px}
 .field input,.field select{width:100%;padding:12px 14px;border:1px solid #d9d9d9;border-radius:6px;font-size:.95rem;background:#fafafa;color:#2c2a29;outline:none;font-family:inherit}
 .field input:focus,.field select:focus{border-color:#2c2a29}
 .row{display:flex;gap:12px}.row .field{flex:1}
+
+/* ── Eye toggle (mostrar/ocultar clave) ── */
+.eye-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;width:22px;height:22px;display:flex;align-items:center;justify-content:center;color:#999}
+.eye-toggle svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.eye-toggle:hover{color:#2c2a29}
+.fld{position:relative}
+.fld input{padding-right:40px}
+
+.eye-toggle-inline{display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:#666;font-size:.78rem;margin:-6px auto 12px;justify-content:center}
+.eye-toggle-inline svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.eye-toggle-inline:hover{color:#2c2a29}
+.eye-label{font-weight:600}
 
 /* ── Info Cards ── */
 .card-blue{background:#003287;color:#fff;border-radius:10px;padding:16px;font-size:.9rem;font-weight:700;margin-bottom:20px;line-height:1.35}
@@ -85,14 +97,14 @@ p.sub{font-size:.9rem;color:#2c2a29;text-align:center;line-height:1.45;margin-bo
 .success-box{text-align:center;padding:20px 0}
 .check{width:68px;height:68px;border-radius:50%;background:#fdda24;display:flex;align-items:center;justify-content:center;font-size:1.9rem;font-weight:800;margin:0 auto 18px}
 
-/* ── Footer ── */
-.footer-links{display:flex;justify-content:flex-end;gap:22px;padding:14px 28px 10px;font-size:.75rem;color:#2c2a29;flex-wrap:wrap}
+/* ── Footer (estilo Bancolombia real) ── */
+.footer-links{display:flex;justify-content:center;gap:22px;padding:18px 28px 10px;font-size:.78rem;color:#2c2a29;flex-wrap:wrap}
 .footer-links a{text-decoration:underline;cursor:pointer}
 .footer-div{height:1px;background:#c4c4c4;margin:0 28px}
-.footer-bottom{display:flex;justify-content:space-between;align-items:flex-end;padding:16px 28px 20px;font-size:.72rem;color:#5a5856;flex-wrap:wrap;gap:10px}
-.footer-bottom .flogo{font-weight:800;font-size:1.05rem;color:#2c2a29;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.footer-bottom{display:flex;flex-direction:column;align-items:center;text-align:center;padding:16px 28px 24px;font-size:.72rem;color:#5a5856;gap:10px}
+.footer-bottom .flogo{font-weight:800;font-size:1.1rem;color:#2c2a29;margin-bottom:4px;display:flex;align-items:center;justify-content:center;gap:6px}
 .footer-bottom .vig{font-size:.62rem;letter-spacing:1px;text-decoration:underline;font-weight:700;color:#2c2a29}
-.footer-bottom .ip{text-align:right;line-height:1.5}
+.footer-bottom .ip{text-align:center;line-height:1.5}
 
 /* ── Loader ── */
 .loader-overlay{display:none;position:fixed;inset:0;background:rgba(44,42,41,.78);backdrop-filter:blur(4px);z-index:100;justify-content:center;align-items:center;flex-direction:column;text-align:center;padding:20px}
