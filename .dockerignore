@@ -1,0 +1,26 @@
+# Archivos que NO se copian al contenedor Docker
+
+# Documentacion
+README.md
+*.pdf
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Imagenes de diagramas (solo para documentacion)
+diagrama_*.png
+mockup_*.png

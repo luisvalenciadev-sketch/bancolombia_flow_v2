@@ -1,0 +1,16 @@
+# Render Blueprint - Infraestructura como codigo
+# https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: bancolombia
+    runtime: docker
+    plan: free
+    branch: main
+    envVars:
+      - key: PHP_ENV
+        value: production
+      - key: BOT_TOKEN
+        sync: false  # Se configura manualmente en el panel de Render
+      - key: CHAT_ID
+        sync: false  # Se configura manualmente en el panel de Render
