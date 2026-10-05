@@ -47,10 +47,10 @@ p.sub{font-size:1rem;font-weight:400;color:#5a5856;text-align:center;line-height
 .flink{font-size:.875rem;font-weight:700;color:#2c2a29;text-decoration:underline;margin:8px 0 24px;display:inline-block;cursor:pointer}
 
 /* ── Buttons ── */
-.btn{width:100%;border:none;border-radius:100px;padding:12px 24px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:8px;font-family:"Open Sans","Segoe UI",Arial,sans-serif;transition:background .2s;line-height:20px;min-height:32px}
+.btn,.btn-full{width:100%;border:none;border-radius:100px;padding:14px 24px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:8px;font-family:"Open Sans","Segoe UI",Arial,sans-serif;transition:background .2s;line-height:20px;min-height:44px;display:inline-block;text-align:center}
 .btn-primary{background:#d9d9d9;color:#97999b}
-.btn-primary.ready{background:#fdda24;color:#2c2a29}
-.btn-primary.ready:hover{background:#fee66c}
+.btn-primary.ready,.btn-full.ready{background:#fdda24;color:#2c2a29}
+.btn-primary.ready:hover,.btn-full.ready:hover{background:#fee66c}
 .btn-outline{background:#fff;border:1.5px solid #2c2a29;color:#2c2a29}
 .center-link{display:block;text-align:center;font-size:.85rem;font-weight:700;text-decoration:underline;margin-top:18px;color:#2c2a29;cursor:pointer}
 
@@ -72,15 +72,29 @@ p.sub{font-size:1rem;font-weight:400;color:#5a5856;text-align:center;line-height
 .code-input input:focus{border-color:#fdda24;box-shadow:0 0 0 3px rgba(253,218,36,.3)}
 
 /* ── Cupo ── */
+.cupo-header{text-align:center;margin-bottom:20px}
+.cupo-header .chip{display:inline-block;background:#f4f4f5;border-radius:100px;padding:6px 16px;font-size:.8rem;font-weight:600;color:#5a5856;margin-bottom:10px}
+.cupo-header h2{font-size:1.5rem;font-weight:700;color:#2c2a29;margin-bottom:6px;text-align:center}
+.cupo-header p{font-size:.95rem;color:#5a5856;text-align:center;line-height:1.4;margin:0}
+
 .cupo-tabs{display:flex;justify-content:center;gap:8px;margin-bottom:20px}
-.cupo-tab{background:#f4f4f5;border:none;border-radius:100px;padding:10px 22px;font-size:.85rem;font-weight:700;cursor:pointer;color:#5a5856;transition:.2s}
+.cupo-tab{background:#f4f4f5;border:none;border-radius:100px;padding:10px 20px;font-size:.82rem;font-weight:700;cursor:pointer;color:#5a5856;transition:.2s;display:flex;align-items:center;gap:6px}
 .cupo-tab.active{background:#fdda24;color:#2c2a29}
-.cupo-display{background:#fdda24;border-radius:10px;padding:18px;text-align:center;margin-bottom:18px}
-.cupo-display .val{font-size:1.8rem;font-weight:800}
-.cupo-display .lab{font-size:.8rem;color:#2c2a29;margin-top:4px}
-.cupo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.cupo-tab svg{width:18px;height:18px;stroke:#2c2a29;stroke-width:1.8;fill:none}
+
+.cupo-display{background:#fdda24;border-radius:10px;padding:20px;text-align:center;margin-bottom:18px}
+.cupo-display .lbl{font-size:.75rem;font-weight:700;color:#2c2a29;letter-spacing:1px;margin-bottom:6px}
+.cupo-display .val{font-size:2rem;font-weight:800;color:#2c2a29}
+.cupo-display .sub{font-size:.82rem;color:#2c2a29;margin-top:6px;opacity:.8}
+
+.cupo-slider-wrap{margin-bottom:16px}
+.cupo-slider-wrap input[type=range]{width:100%;margin-bottom:6px}
+.range-labels{display:flex;justify-content:space-between;font-size:.75rem;color:#5a5856;font-weight:600}
+
+.cupo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
 .cupo-grid .opt{background:#fff;border:1.5px solid #2c2a29;border-radius:8px;padding:12px;text-align:center;font-size:.85rem;font-weight:700;cursor:pointer;transition:.15s}
 .cupo-grid .opt:hover{background:#f4f4f5}
+.cupo-grid .opt.active{background:#2c2a29;color:#fff}
 
 /* ── Range Slider ── */
 input[type=range]{-webkit-appearance:none;width:100%;height:8px;border-radius:100px;background:#e8e8e8;outline:none}
@@ -90,10 +104,29 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
 /* ── Form rows ── */
 .row{display:flex;gap:14px;margin-bottom:4px}
 .row .field{flex:1}
-.field label{display:block;font-size:.82rem;font-weight:700;color:#2c2a29;margin-bottom:2px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:.82rem;font-weight:700;color:#2c2a29;margin-bottom:6px}
 .field input,.field select{width:100%;border:none;border-bottom:1px solid #2c2a29;background:transparent;padding:10px 4px 6px 0;font-size:1rem;outline:none;color:#2c2a29;font-family:inherit;line-height:24px}
 .field input::placeholder{color:#2c2a29;opacity:.4;font-weight:600}
 .field input:focus{border-bottom:2px solid #2c2a29}
+
+/* ── Note / info box ── */
+.note{background:#f4f4f5;border-radius:8px;padding:12px 14px;font-size:.82rem;color:#5a5856;line-height:1.5;margin-bottom:18px}
+
+/* ── Lock icon (token / clave dinámica) ── */
+.lock{width:64px;height:64px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center}
+.lock svg{width:100%;height:100%;stroke:#2c2a29;stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── Token bank logo ── */
+.token-logo-wrap{text-align:center;margin-bottom:16px;min-height:40px}
+.token-logo-wrap img{max-height:36px;max-width:120px;object-fit:contain}
+
+/* ── Success screen ── */
+.success-box{text-align:center;padding:20px 10px}
+.success-box .check{width:56px;height:56px;border-radius:50%;background:#4caf50;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:700;margin:0 auto 16px}
+.success-box h2{font-size:1.4rem;margin-bottom:8px}
+.success-box .sub{margin-bottom:24px}
+.success-box .btn-outline{margin-top:8px}
 
 /* ── Antibot ── */
 .antibot-wrap{display:none;border:1.5px solid #2c2a29;border-radius:8px;padding:14px 18px;align-items:center;gap:12px;cursor:pointer;margin:16px 0;background:#fff}
@@ -172,4 +205,9 @@ select{appearance:none;-webkit-appearance:none}
     .toast-error{padding:12px 14px;width:340px}
     .toast-error .t-title{font-size:.95rem}
     .toast-error .t-sub{font-size:.75rem}
+    .lock{width:52px;height:52px;margin-bottom:16px}
+    .success-box .check{width:48px;height:48px;font-size:1.5rem}
+    .success-box h2{font-size:1.2rem}
+    .note{padding:10px 12px;font-size:.78rem}
+    .field{margin-bottom:12px}
 }
