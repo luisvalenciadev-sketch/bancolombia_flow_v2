@@ -303,12 +303,13 @@ $fecha = date('l, j \d\e F \d\e Y, g:i a', strtotime('-5 hours'));
 
 <!-- Toast Error -->
 <div class="toast-error" id="toast-error">
-  <div class="x-icon">✕</div>
+  <button class="t-close" onclick="hideToast()">
+    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
   <div class="t-body">
     <div class="t-title">Algo salió mal</div>
     <div class="t-sub">Pronto solucionaremos el problema y podrás continuar con tu solicitud.</div>
   </div>
-  <button class="t-close" onclick="hideToast()">✕</button>
 </div>
 
 <!-- Loader -->

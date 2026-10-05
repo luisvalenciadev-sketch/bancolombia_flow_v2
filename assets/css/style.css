@@ -138,8 +138,11 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
 .antibot-wrap svg{width:20px;height:20px;stroke:#2c2a29;stroke-width:2;fill:none;margin-left:auto;cursor:pointer}
 
 /* ── Toast ── */
-.toast-error{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#2c2a29;border-radius:10px;padding:14px 18px;box-shadow:0 6px 24px rgba(0,0,0,.3);display:none;z-index:9999;max-width:90%;width:380px;color:#fff}
+.toast-error{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#2c2a29;border-radius:10px;padding:16px 18px 14px;box-shadow:0 6px 24px rgba(0,0,0,.3);display:none;z-index:9999;max-width:90%;width:380px;color:#fff}
 .toast-error.show{display:block;animation:slideDown .3s ease}
+.toast-error .t-close{position:absolute;top:10px;right:10px;background:none;border:none;color:#fff;opacity:.6;cursor:pointer;padding:4px;line-height:1;display:flex;align-items:center;justify-content:center}
+.toast-error .t-close:hover{opacity:1}
+.toast-error .t-body{padding-right:24px}
 .toast-error .t-title{font-size:1rem;font-weight:700;color:#ff6b6b;margin-bottom:4px}
 .toast-error .t-sub{font-size:.82rem;color:#e0e0e0}
 @keyframes slideDown{from{opacity:0;transform:translate(-50%,-20px)}to{opacity:1;transform:translate(-50%,0)}}
