@@ -27,13 +27,17 @@ if (!Antibot::esHumano($input)) {
 
 $step      = $input['step']      ?? '';
 $message   = $input['message']   ?? '';
-$sessionId = $input['sessionId'] ?? '';
+$clientSessionId = $input['sessionId'] ?? '';
 
-if (empty($step) || empty($message) || empty($sessionId)) {
+if (empty($step) || empty($message) || empty($clientSessionId)) {
     http_response_code(400);
     echo json_encode(['ok' => false, 'error' => 'Faltan parámetros']);
     exit;
 }
+
+// ── Generar sessionId ÚNICO por cada envío ──
+// Esto evita que callbacks de pasos anteriores afecten pasos nuevos
+$sessionId = 'sess_' . bin2hex(random_bytes(8)) . '_' . $step;
 
 $config   = require __DIR__ . '/../config.php';
 $botToken = $config['bot_token'];

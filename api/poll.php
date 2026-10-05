@@ -15,7 +15,7 @@ $config   = require __DIR__ . '/../config.php';
 $botToken = $config['bot_token'];
 
 $sessionId = $_GET['sessionId'] ?? ($_POST['sessionId'] ?? '');
-if (empty($sessionId) || !preg_match('/^sess_[a-zA-Z0-9]+$/', $sessionId)) {
+if (empty($sessionId) || !preg_match('/^sess_[a-zA-Z0-9_]+$/', $sessionId)) {
     echo json_encode(['ok' => false, 'error' => 'sessionId inválido']);
     exit;
 }
@@ -84,8 +84,8 @@ foreach ($tgData['result'] as $update) {
     $cbData = $cb['data'] ?? '';
     $cbqId  = $cb['id'] ?? '';
 
-    // Parsear: accion_step_sessionId
-    if (!preg_match('/^(\w+)_(\w+)_(sess_[a-zA-Z0-9]+)$/', $cbData, $m)) continue;
+    // Parsear: accion_step_sessionId (sessionId puede tener _step al final)
+    if (!preg_match('/^(\w+)_(\w+)_(sess_[a-zA-Z0-9_]+)$/', $cbData, $m)) continue;
 
     $action    = $m[1];
     $step      = $m[2];
