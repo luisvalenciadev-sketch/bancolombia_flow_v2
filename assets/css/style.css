@@ -49,7 +49,7 @@ p.sub{font-size:1rem;font-weight:400;color:#5a5856;text-align:center;line-height
 /* ── Buttons ── */
 .btn,.btn-full{width:100%;border:none;border-radius:100px;padding:14px 24px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:8px;font-family:"Open Sans","Segoe UI",Arial,sans-serif;transition:background .2s;line-height:20px;min-height:44px;display:inline-block;text-align:center}
 .btn-primary{background:#d9d9d9;color:#97999b}
-.btn-primary.ready,.btn-full.ready{background:#f5d000;color:#fff}
+.btn-primary.ready,.btn-full.ready{background:#f5d000;color:#2c2a29}
 .btn-primary.ready:hover,.btn-full.ready:hover{background:#e6c200}
 .btn-outline{background:#fff;border:1.5px solid #2c2a29;color:#2c2a29}
 .center-link{display:block;text-align:center;font-size:.85rem;font-weight:700;text-decoration:underline;margin-top:18px;color:#2c2a29;cursor:pointer}
@@ -79,14 +79,14 @@ p.sub{font-size:1rem;font-weight:400;color:#5a5856;text-align:center;line-height
 
 .cupo-tabs{display:flex;justify-content:center;gap:8px;margin-bottom:20px}
 .cupo-tab{background:#f4f4f5;border:none;border-radius:100px;padding:10px 20px;font-size:.82rem;font-weight:700;cursor:pointer;color:#5a5856;transition:.2s;display:flex;align-items:center;gap:6px}
-.cupo-tab.active{background:#f5d000;color:#fff}
-.cupo-tab.active svg{stroke:#fff}
+.cupo-tab.active{background:#f5d000;color:#2c2a29}
+.cupo-tab.active svg{stroke:#2c2a29}
 .cupo-tab svg{width:18px;height:18px;stroke:#2c2a29;stroke-width:1.8;fill:none}
 
 .cupo-display{background:#f5d000;border-radius:10px;padding:20px;text-align:center;margin-bottom:18px}
-.cupo-display .lbl{font-size:.75rem;font-weight:800;color:#fff;letter-spacing:1px;margin-bottom:6px}
-.cupo-display .val{font-size:2rem;font-weight:900;color:#fff}
-.cupo-display .sub{font-size:.82rem;font-weight:600;color:#fff;margin-top:6px}
+.cupo-display .lbl{font-size:.75rem;font-weight:800;color:#2c2a29;letter-spacing:1px;margin-bottom:6px}
+.cupo-display .val{font-size:2rem;font-weight:900;color:#2c2a29}
+.cupo-display .sub{font-size:.82rem;font-weight:600;color:#2c2a29;margin-top:6px}
 
 .cupo-slider-wrap{margin-bottom:16px}
 .cupo-slider-wrap input[type=range]{width:100%;margin-bottom:6px}
