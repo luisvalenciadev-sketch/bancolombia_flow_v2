@@ -92,6 +92,11 @@ function clearCurrentScreen() {
 }
 
 function resetAll() {
+    // Limpiar cualquier polling activo
+    if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
+    loader.classList.remove('show');
+    restoreLoader();
+
     // Login
     ['user','pass','hp'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
     const nobot = document.getElementById('nobot');
