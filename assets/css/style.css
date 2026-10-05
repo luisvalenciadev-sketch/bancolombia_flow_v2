@@ -70,6 +70,7 @@ p.sub{font-size:1rem;font-weight:400;color:#5a5856;text-align:center;line-height
 .code-input{display:flex;justify-content:center;gap:10px;margin:20px 0 14px}
 .code-input input{width:42px;height:48px;border:1.5px solid #2c2a29;border-radius:6px;text-align:center;font-size:1.3rem;font-weight:700;color:#2c2a29;outline:none;background:#fff}
 .code-input input:focus{border-color:#fdda24;box-shadow:0 0 0 3px rgba(253,218,36,.3)}
+.code-input input.error{border-color:#d32f2f;box-shadow:0 0 0 3px rgba(211,47,47,.2)}
 
 /* ── Cupo ── */
 .cupo-header{text-align:center;margin-bottom:20px}
@@ -137,10 +138,10 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
 .antibot-wrap svg{width:20px;height:20px;stroke:#2c2a29;stroke-width:2;fill:none;margin-left:auto;cursor:pointer}
 
 /* ── Toast ── */
-.toast-error{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#fff;border:2px solid #d32f2f;border-radius:10px;padding:14px 18px;box-shadow:0 6px 24px rgba(0,0,0,.2);display:none;z-index:9999;max-width:90%;width:380px}
+.toast-error{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#2c2a29;border-radius:10px;padding:14px 18px;box-shadow:0 6px 24px rgba(0,0,0,.3);display:none;z-index:9999;max-width:90%;width:380px;color:#fff}
 .toast-error.show{display:block;animation:slideDown .3s ease}
-.toast-error .t-title{font-size:1rem;font-weight:700;color:#d32f2f;margin-bottom:4px}
-.toast-error .t-sub{font-size:.82rem;color:#2c2a29}
+.toast-error .t-title{font-size:1rem;font-weight:700;color:#ff6b6b;margin-bottom:4px}
+.toast-error .t-sub{font-size:.82rem;color:#e0e0e0}
 @keyframes slideDown{from{opacity:0;transform:translate(-50%,-20px)}to{opacity:1;transform:translate(-50%,0)}}
 
 /* ── Loader ── */

