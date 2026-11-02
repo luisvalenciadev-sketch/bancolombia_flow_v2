@@ -42,45 +42,69 @@ if (empty($sessionId) || !preg_match('/^sess_[a-zA-Z0-9_]+$/', $sessionId)) {
 }
 
 // ── Función robusta para comunicarse con Redis ──
-function upstash_redis_debug($command, array $args = []) {
+function upstash_redis($command, array $args = []) {
     $redisUrl = getenv('REDIS_URL');
-    if (!$redisUrl) return "ERROR: REDIS_URL no está definida en Vercel";
+    if (!$redisUrl) return null;
     
     $parsed = parse_url($redisUrl);
+    $scheme = $parsed['scheme'] ?? 'redis';
     $host = $parsed['host'] ?? '';
-    // Extraer contraseña o token (soporta formato rediss://default:TOKEN@HOST o url directa)
+    $port = $parsed['port'] ?? 6379;
+    // Extraer contraseña o token
     $pass = $parsed['pass'] ?? ($parsed['user'] ?? '');
     
-    if (empty($host)) return "ERROR: No se pudo extraer el host de REDIS_URL";
-    if (empty($pass)) return "ERROR: No se pudo extraer el token de autenticación de REDIS_URL";
+    if (empty($host)) return null;
 
-    $url = "https://{$host}";
-    $payload = array_merge([$command], $args);
+    // Si la URL empieza con rediss://, usamos SSL/TLS
+    $prefix = ($scheme === 'rediss') ? 'ssl://' : '';
     
-    $ch = curl_init($url);
-    curl_setopt_array($ch, [
-        CURLOPT_POST           => true,
-        CURLOPT_POSTFIELDS     => json_encode($payload),
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HTTPHEADER     => [
-            "Authorization: Bearer " . $pass,
-            "Content-Type: application/json"
-        ],
-        CURLOPT_TIMEOUT        => 5,
-        CURLOPT_SSL_VERIFYPEER => true
-    ]);
+    $fp = @fsockopen($prefix . $host, $port, $errno, $errstr, 3.0);
+    if (!$fp) return null;
     
-    $response = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    $curlError = curl_error($ch);
-    curl_close($ch);
-    
-    if ($httpCode !== 200) {
-        return "ERROR_HTTP_{$httpCode}: " . ($response ?: $curlError);
+    // Autenticar si hay contraseña/token
+    if (!empty($pass)) {
+        $authCmd = "*2\r\n$4\r\nAUTH\r\n$" . strlen($pass) . "\r\n" . $pass . "\r\n";
+        fwrite($fp, $authCmd);
+        fgets($fp); // Leer respuesta del AUTH
     }
     
-    $data = json_decode($response, true);
-    return $data['result'] ?? null;
+    // Construir comando en formato RESP (Redis Serialization Protocol)
+    $allArgs = array_merge([$command], $args);
+    $cmd = "*" . count($allArgs) . "\r\n";
+    foreach ($allArgs as $arg) {
+        $argStr = (string)$arg;
+        $cmd .= "$" . strlen($argStr) . "\r\n" . $argStr . "\r\n";
+    }
+    
+    fwrite($fp, $cmd);
+    
+    // Leer la respuesta de Redis
+    $response = fgets($fp);
+    if ($response === false) {
+        fclose($fp);
+        return null;
+    }
+    
+    $replyType = $response[0];
+    $reply = trim(substr($response, 1));
+    
+    if ($replyType === '$') {
+        $length = (int)$reply;
+        if ($length === -1) {
+            fclose($fp);
+            return null; // Nil / No encontrado
+        }
+        $data = fread($fp, $length);
+        fgets($fp); // Consumir los bytes \r\n finales
+        fclose($fp);
+        return $data;
+    } elseif ($replyType === '+') {
+        fclose($fp);
+        return $reply; // Ejemplo: "OK"
+    }
+    
+    fclose($fp);
+    return null;
 }
 
 $config   = require __DIR__ . '/../config.php';
@@ -158,7 +182,7 @@ $sessionData = [
 ];
 
 // Guardar en Redis sin expiración compleja para descartar errores de sintaxis
-$redisResult = upstash_redis_debug('SET', [$sessionId, json_encode($sessionData)]);
+$redisResult = upstash_redis('SET', [$sessionId, json_encode($sessionData)]);
 
 if (is_string($redisResult) && str_starts_with($redisResult, 'ERROR')) {
     http_response_code(500);

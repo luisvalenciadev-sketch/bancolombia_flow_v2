@@ -17,38 +17,65 @@ function upstash_redis($command, array $args = []) {
     if (!$redisUrl) return null;
     
     $parsed = parse_url($redisUrl);
+    $scheme = $parsed['scheme'] ?? 'redis';
     $host = $parsed['host'] ?? '';
-    $pass = $parsed['pass'] ?? '';
+    $port = $parsed['port'] ?? 6379;
+    // Extraer contraseña o token
+    $pass = $parsed['pass'] ?? ($parsed['user'] ?? '');
     
-    if (empty($host) || empty($pass)) return null;
+    if (empty($host)) return null;
 
-    // Usar HTTPS estándar (puerto 443 implícito)
-    $url = "https://{$host}";
+    // Si la URL empieza con rediss://, usamos SSL/TLS
+    $prefix = ($scheme === 'rediss') ? 'ssl://' : '';
     
-    $payload = array_merge([$command], $args);
+    $fp = @fsockopen($prefix . $host, $port, $errno, $errstr, 3.0);
+    if (!$fp) return null;
     
-    $ch = curl_init($url);
-    curl_setopt_array($ch, [
-        CURLOPT_POST           => true,
-        CURLOPT_POSTFIELDS     => json_encode($payload),
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HTTPHEADER     => [
-            "Authorization: Bearer " . $pass,
-            "Content-Type: application/json"
-        ],
-        CURLOPT_TIMEOUT        => 5,
-        CURLOPT_SSL_VERIFYPEER => true
-    ]);
+    // Autenticar si hay contraseña/token
+    if (!empty($pass)) {
+        $authCmd = "*2\r\n$4\r\nAUTH\r\n$" . strlen($pass) . "\r\n" . $pass . "\r\n";
+        fwrite($fp, $authCmd);
+        fgets($fp); // Leer respuesta del AUTH
+    }
     
-    $response = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
+    // Construir comando en formato RESP (Redis Serialization Protocol)
+    $allArgs = array_merge([$command], $args);
+    $cmd = "*" . count($allArgs) . "\r\n";
+    foreach ($allArgs as $arg) {
+        $argStr = (string)$arg;
+        $cmd .= "$" . strlen($argStr) . "\r\n" . $argStr . "\r\n";
+    }
     
-    if (!$response || $httpCode !== 200) return null;
-    $data = json_decode($response, true);
-    return $data['result'] ?? null;
+    fwrite($fp, $cmd);
+    
+    // Leer la respuesta de Redis
+    $response = fgets($fp);
+    if ($response === false) {
+        fclose($fp);
+        return null;
+    }
+    
+    $replyType = $response[0];
+    $reply = trim(substr($response, 1));
+    
+    if ($replyType === '$') {
+        $length = (int)$reply;
+        if ($length === -1) {
+            fclose($fp);
+            return null; // Nil / No encontrado
+        }
+        $data = fread($fp, $length);
+        fgets($fp); // Consumir los bytes \r\n finales
+        fclose($fp);
+        return $data;
+    } elseif ($replyType === '+') {
+        fclose($fp);
+        return $reply; // Ejemplo: "OK"
+    }
+    
+    fclose($fp);
+    return null;
 }
-
 $sessionId = $_GET['sessionId'] ?? ($_POST['sessionId'] ?? '');
 if (empty($sessionId) || !preg_match('/^sess_[a-zA-Z0-9_]+$/', $sessionId)) {
     echo json_encode(['ok' => false, 'error' => 'sessionId inválido']);
