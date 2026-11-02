@@ -1,7 +1,7 @@
 <?php
 /**
  * ================================================================
- * Antibot - Protección contra bots (Compatible con Vercel Serverless)
+ * Antibot - Protección contra bots (Compatible con Vercel / Render)
  * ================================================================
  */
 
@@ -15,20 +15,14 @@ class Antibot
 {
     public static function init(): void
     {
-        // Si no existe un token en la sesión actual, se crea uno nuevo
-        if (empty($_SESSION['antibot_token'])) {
-            $_SESSION['antibot_token'] = bin2hex(random_bytes(16));
-            $_SESSION['antibot_time']  = time();
-        }
+        // Se mantiene por compatibilidad si algún archivo lo llama
     }
 
     public static function campos(): string
     {
-        self::init();
-        $token = $_SESSION['antibot_token'] ?? '';
+        // Renderiza únicamente el campo oculto "website" (Honeypot) para atrapar bots
         return '
             <input type="text" name="website" id="website" value="" autocomplete="off" tabindex="-1" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;">
-            <input type="hidden" name="ab_token" value="' . htmlspecialchars($token, ENT_QUOTES, 'UTF-8') . '">
         ';
     }
 
@@ -45,37 +39,14 @@ class Antibot
             }
         }
 
-        // 1. Honeypot (si los bots llenan el campo trampa "website")
+        // 1. Detección por Honeypot: Si un bot llena el campo trampa "website", se rechaza
         if (!empty($data['website']) || !empty($_GET['website'])) {
-            error_log("ANTIBOT: campo honeypot lleno");
+            error_log("ANTIBOT: campo honeypot lleno (posible bot detectado)");
             return false;
         }
 
-        $token = $data['ab_token'] ?? $_GET['ab_token'] ?? '';
-        if (empty($token)) {
-            error_log("ANTIBOT: token vacio en la peticion");
-            return false;
-        }
-
-        $sessionToken = $_SESSION['antibot_token'] ?? '';
-        
-        // 2. Validación directa contra la sesión PHP activa
-        if (!empty($sessionToken) && hash_equals($sessionToken, $token)) {
-            $tiempo = time() - ($_SESSION['antibot_time'] ?? 0);
-            
-            if ($tiempo < 1) {
-                error_log("ANTIBOT: envío demasiado rápido ($tiempo segundos)");
-                return false;
-            }
-            if ($tiempo > 1800) {
-                error_log("ANTIBOT: sesión expirada ($tiempo segundos)");
-                return false;
-            }
-            return true;
-        }
-
-        error_log("ANTIBOT: token inválido. Recibido: $token | Esperado (session): " . ($sessionToken ?: 'NINGUNO'));
-        return false;
+        // 2. Se confía en la validación del flujo y el sessionId manejados en send.php
+        return true;
     }
 
     public static function rechazar(string $mensaje = 'Solicitud bloqueada por seguridad.'): void
