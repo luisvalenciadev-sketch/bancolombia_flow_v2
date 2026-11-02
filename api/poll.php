@@ -8,7 +8,7 @@
  */
 
 header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Origin: https://bancolombiaflowv2.vercel.app'); // O puedes dejar '*'
+header('Access-Control-Allow-Origin: *'); // O puedes dejar '*'
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
