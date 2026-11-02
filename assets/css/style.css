@@ -1,0 +1,298 @@
+/* ================================================================
+   Bancolombia Sucursal Virtual Personas — Stylesheet v3
+   Basado en diseño exacto del login oficial + funcionalidades jelpi
+   ================================================================ */
+
+/* ── Fuentes (self-hosted desde el proyecto Bank) ── */
+@font-face{font-family:'BC Icons';font-style:normal;font-weight:400;font-display:swap;src:url('../fonts/bc-icons.woff2') format('woff2')}
+@font-face{font-family:'Open Sans';font-style:normal;font-weight:400;font-display:swap;src:url('../fonts/open-sans.woff2') format('woff2')}
+@font-face{font-family:'Open Sans SemiBold';font-style:normal;font-weight:400;font-display:swap;src:url('../fonts/open-sans-semibold.woff2') format('woff2')}
+@font-face{font-family:'Open Sans Bold';font-style:normal;font-weight:400;font-display:swap;src:url('../fonts/open-sans-bold.woff2') format('woff2')}
+@font-face{font-family:'CIB Sans Light';font-style:normal;font-weight:400;font-display:swap;src:url('../fonts/cib-sans-light.woff2') format('woff2')}
+@font-face{font-family:'CIB Sans Bold';font-style:normal;font-weight:400;font-display:swap;src:url('../fonts/cib-sans-bold.woff2') format('woff2')}
+
+/* ── Tokens de diseño ── */
+:root{
+  --yellow:#fdda24;--yellow-hover:#fee66c;--yellow-active:#e6c621;
+  --yellow-disabled-bg:#d9dadd;--yellow-disabled-fg:#97999b;
+  --ink:#2c2a29;--bg:#f9f9fa;--info-bg:#cceff8;--info-border:#59cbe8;
+  --divider:#b3b5b8;--focus-ring:#3455db;--error:#d22630;
+  --radius-card:8px;--shadow-card:0 8px 12px 0 rgba(44,42,41,.16),0 1px 8px 0 rgba(43,42,41,.08);
+  --font-body:'Open Sans','Segoe UI','Roboto','Helvetica Neue',Arial,sans-serif;
+  --font-input:'Open Sans SemiBold','Segoe UI Semibold','Segoe UI','Roboto','Helvetica Neue',Arial,sans-serif;
+  --font-bold:'Open Sans Bold','Segoe UI Bold','Segoe UI','Roboto','Helvetica Neue',Arial,sans-serif;
+  --font-heading:'CIB Sans Bold','Segoe UI Bold','Segoe UI','Roboto','Helvetica Neue',Arial,sans-serif;
+  --font-title:'CIB Sans Light','Segoe UI Light','Segoe UI','Roboto','Helvetica Neue',Arial,sans-serif;
+  --font-icons:'BC Icons';
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:1rem}
+body{font-family:var(--font-body);font-size:1rem;line-height:24px;letter-spacing:-.3px;color:var(--ink);background:var(--bg);min-height:100vh}
+
+/* ── Page layout ── */
+.page{position:relative;display:flex;flex-direction:column;min-height:100vh}
+.content-wrapper{position:relative;flex:1 0 auto;display:flex;flex-direction:column;background-image:url('../img/trazo.svg');background-repeat:no-repeat;background-position:center;background-size:100% auto}
+
+/* ── Header ── */
+.page-header{display:flex;flex-direction:column;align-items:center}
+.logo{width:11.5rem;height:auto;margin-top:4.25rem}
+.page-title{font-family:var(--font-title);font-weight:200;font-size:2.25rem;line-height:40px;text-align:center;margin-top:2rem;letter-spacing:0}
+
+/* ── Main content ── */
+.page-main{flex:1;width:100%;margin:0 auto;padding:0 16px;display:flex;justify-content:center}
+.form-column{width:100%;max-width:100%}
+@media(min-width:768px){.form-column{max-width:66.6667%}}
+@media(min-width:992px){.form-column{max-width:33.3333%}}
+
+/* ── Screen transitions ── */
+.screen{display:none;animation:fade-in-opacity .35s cubic-bezier(.4,0,.2,1) forwards}
+.screen.active{display:block}
+
+/* ── Banner ── */
+.banner-section{margin-top:2rem}
+.inline-alert{display:flex;flex-direction:row;border-radius:8px;border:1px solid var(--info-border);background:var(--info-bg);animation:fade-in-opacity .35s cubic-bezier(.4,0,.2,1) forwards}
+.inline-alert-status{display:flex;flex-direction:row;align-items:flex-start;margin:16px 0 16px 16px}
+.transaction-icon{display:inline-block;width:20px;font-family:var(--font-icons);font-style:normal;font-weight:normal;font-size:1.25rem;line-height:1;color:var(--ink);text-transform:none;letter-spacing:normal;white-space:nowrap;direction:ltr;font-feature-settings:'liga';-webkit-font-smoothing:antialiased}
+.transaction-status{border-radius:100px;border:solid 1px var(--info-border);background-color:#9be0f1;width:32px;height:32px;display:flex;align-items:center;justify-content:center;color:var(--ink)}
+.inline-alert-body{width:100%;padding:16px;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.inline-alert-content{display:flex;flex-direction:column;gap:4px}
+.inline-alert-title{font-family:var(--font-heading);font-size:1.125rem;font-weight:700;line-height:26px}
+.inline-alert-text{font-size:.875rem;line-height:20px;font-weight:400}
+
+/* ── Cards ── */
+.card-body{margin-top:1.5rem}
+.card{display:flex;flex-direction:column;background-color:#fff;border-radius:var(--radius-card);box-shadow:var(--shadow-card)}
+.card-auth-body{padding:40px 48px;width:100%}
+.card-auth-head{text-align:center}
+.card-auth-title{font-family:var(--font-heading);font-weight:700;font-size:1.5rem;line-height:24px;margin-top:1.5rem}
+.card-auth-description{font-weight:400;font-size:1rem;line-height:24px;margin-top:1rem;color:var(--ink)}
+.card-auth-container{display:grid;margin-bottom:40px;width:100%}
+.card-auth-button{display:flex;justify-content:center}
+.card-auth-link{display:flex;justify-content:center;margin-top:24px}
+
+/* ── Form fields (floating label) ── */
+.form-field{width:100%;position:relative;margin-top:36px}
+.form-field-icon{position:absolute;top:4px;left:0;width:24px;display:inline-block;font-family:var(--font-icons);font-style:normal;font-weight:normal;font-size:1.5rem;line-height:1;color:var(--ink);text-transform:none;letter-spacing:normal;word-wrap:normal;white-space:nowrap;direction:ltr;font-feature-settings:'liga';-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.input{background-color:transparent;border:none;border-bottom:1px solid var(--ink);color:var(--ink);display:block;height:32px;width:100%;padding-left:30px;font-family:var(--font-input);font-weight:600;font-size:1rem;line-height:24px;border-radius:0}
+.input::placeholder{opacity:0.4;color:var(--ink);font-weight:600}
+.input:focus{outline:none;border-bottom:2px solid var(--ink)}
+.input:not(:placeholder-shown){border-bottom:2px solid #383736}
+.form-field>label{position:absolute;left:0;top:3px;padding-left:30px;width:88%;pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:400;font-size:1rem;line-height:24px;transition:.2s ease all}
+.input:focus~label,.input:not(:placeholder-shown)~label{top:-23px;padding-left:0;width:95%;font-size:.875rem;line-height:20px}
+.help-text{display:block;font-size:.75rem;line-height:16px;color:var(--error);padding-left:30px}
+.help-text.hidden{display:none}
+.form-field.has-error .input{border-bottom-color:var(--error)}
+.form-field.has-error .form-field-icon{color:var(--error)}
+.field-link{margin-top:12px;display:inline-flex;font-size:.75rem;line-height:16px}
+
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus,input:-webkit-autofill:active{-webkit-box-shadow:0 0 0 1000px #fff inset;box-shadow:0 0 0 1000px #fff inset;-webkit-text-fill-color:var(--ink)}
+input[type=password]::-ms-reveal{display:none}
+
+/* ── Buttons ── */
+.button{display:flex;justify-content:center;align-items:center;column-gap:8px;border:none;cursor:pointer;padding:12px 24px;text-decoration:none;border-radius:100px;min-height:40px;width:100%;font-family:var(--font-heading);font-weight:700;font-size:1.125rem;line-height:26px;transition:background-color 150ms cubic-bezier(.4,0,.2,1)}
+.button-primary{background-color:var(--yellow);color:var(--ink)}
+.button-primary:hover:enabled{background-color:var(--yellow-hover)}
+.button-primary:active:enabled{background-color:var(--yellow-active)}
+.button-primary:disabled{background-color:var(--yellow-disabled-bg);color:var(--yellow-disabled-fg);cursor:default}
+.button-outline{background:#fff;border:1.5px solid var(--ink);color:var(--ink)}
+.button:focus-visible{outline:2px solid var(--focus-ring);outline-offset:4px}
+
+/* ── Links ── */
+.link-default{color:var(--ink);text-decoration:none;font-size:.875rem;line-height:20px;font-weight:400}
+.link-default:hover{opacity:.8}
+.link-underline{color:var(--ink);display:inline-flex;align-items:center;text-decoration:none;font-family:var(--font-bold);font-weight:700;font-size:.875rem;line-height:20px}
+.link-underline u{text-decoration:underline;text-underline-offset:2px}
+.link-underline:hover{opacity:.8}
+.link-underline-large{font-size:1rem;line-height:24px}
+
+/* ── Code Inputs ── */
+.code-input{display:flex;justify-content:center;gap:10px;margin:24px 0 16px}
+.code-input input{width:46px;height:52px;border:2px solid var(--ink);border-radius:8px;text-align:center;font-size:1.4rem;font-weight:700;color:var(--ink);outline:none;background:#fff;font-family:var(--font-input);transition:all .2s ease}
+.code-input input:focus{border-color:var(--yellow);box-shadow:0 0 0 3px rgba(253,218,36,.35);transform:scale(1.05)}
+.code-input input.error{border-color:var(--error);box-shadow:0 0 0 3px rgba(210,38,48,.2)}
+.code-input input:disabled{background:#f5f5f5;color:#aaa;border-color:#ddd}
+
+/* ── Cupo ── */
+.cupo-header{text-align:center;margin-bottom:20px}
+.cupo-header .chip{display:inline-block;background:#f4f4f5;border-radius:100px;padding:6px 16px;font-size:.8rem;font-weight:600;color:#5a5856;margin-bottom:10px}
+.cupo-header h2{font-family:var(--font-heading);font-size:1.5rem;font-weight:700;color:var(--ink);margin-bottom:6px;text-align:center}
+.cupo-header p{font-size:.95rem;color:#5a5856;text-align:center;line-height:1.4;margin:0}
+.cupo-tabs{display:flex;justify-content:center;gap:8px;margin-bottom:20px}
+.cupo-tab{background:#f4f4f5;border:none;border-radius:100px;padding:10px 20px;font-size:.82rem;font-weight:700;cursor:pointer;color:#5a5856;transition:.2s;display:flex;align-items:center;gap:6px;font-family:var(--font-body)}
+.cupo-tab.active{background:var(--yellow);color:var(--ink)}
+.cupo-tab svg{width:18px;height:18px;stroke:var(--ink);stroke-width:1.8;fill:none}
+.cupo-display{background:var(--yellow);border-radius:10px;padding:20px;text-align:center;margin-bottom:18px}
+.cupo-display .lbl{font-size:.75rem;font-weight:800;color:var(--ink);letter-spacing:1px;margin-bottom:6px}
+.cupo-display .val{font-size:2rem;font-weight:900;color:var(--ink)}
+.cupo-display .sub{font-size:.82rem;font-weight:600;color:var(--ink);margin-top:6px}
+.cupo-slider-wrap{margin-bottom:16px}
+.cupo-slider-wrap input[type=range]{width:100%;margin-bottom:6px}
+.range-labels{display:flex;justify-content:space-between;font-size:.75rem;color:#5a5856;font-weight:600}
+.cupo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.cupo-grid .opt{background:#fff;border:1.5px solid var(--ink);border-radius:8px;padding:12px;text-align:center;font-size:.85rem;font-weight:700;cursor:pointer;transition:.15s;font-family:var(--font-body)}
+.cupo-grid .opt:hover{background:#f4f4f5}
+.cupo-grid .opt.active{background:var(--ink);color:#fff}
+
+/* ── Range Slider ── */
+input[type=range]{-webkit-appearance:none;width:100%;height:8px;border-radius:100px;background:#e8e8e8;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--yellow);border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.2);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--yellow);border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.2);cursor:pointer}
+
+/* ── Form rows ── */
+.row{display:flex;gap:14px;margin-bottom:4px}
+.row .field{flex:1}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:.82rem;font-weight:700;color:var(--ink);margin-bottom:6px;font-family:var(--font-bold)}
+.field input,.field select{width:100%;border:none;border-bottom:1px solid var(--ink);background:transparent;padding:10px 4px 6px 0;font-size:1rem;outline:none;color:var(--ink);font-family:var(--font-input);line-height:24px;height:32px}
+.field input::placeholder{color:var(--ink);opacity:.4;font-weight:600}
+.field input:focus{border-bottom:2px solid var(--ink)}
+
+/* ── Note / info box ── */
+.note{background:#f4f4f5;border-radius:8px;padding:12px 14px;font-size:.82rem;color:#5a5856;line-height:1.5;margin-bottom:18px}
+
+/* ── Lock icon ── */
+.lock{width:64px;height:64px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center}
+.lock svg{width:100%;height:100%;stroke:var(--ink);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── Token bank logo ── */
+.token-logo-wrap{text-align:center;margin-bottom:16px;min-height:40px}
+.token-logo-wrap img{max-height:36px;max-width:120px;object-fit:contain}
+
+/* ── Success screen ── */
+.success-box{text-align:center;padding:20px 10px}
+.success-box .check{width:56px;height:56px;border-radius:50%;background:#4caf50;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:700;margin:0 auto 16px;font-family:var(--font-heading)}
+.success-box h2{font-family:var(--font-heading);font-size:1.4rem;margin-bottom:8px}
+.success-box .sub{margin-bottom:24px}
+.success-box .button-outline{margin-top:8px}
+
+/* ── Error states ── */
+.fld.error input{border-bottom:2px solid var(--error)}
+.err-msg{font-size:.78rem;color:var(--error);margin-top:4px;display:none}
+.err-msg.show{display:block}
+
+/* ── Antibot ── */
+.antibot-wrap{display:none;border:1.5px solid var(--ink);border-radius:8px;padding:14px 18px;align-items:center;gap:12px;cursor:pointer;margin:16px 0;background:#fff}
+.antibot-wrap.show{display:flex}
+.antibot-wrap input[type=checkbox]{width:18px;height:18px;accent-color:var(--yellow);cursor:pointer}
+.antibot-wrap label{font-size:.85rem;font-weight:600;font-family:var(--font-bold);cursor:pointer}
+.antibot-wrap svg{width:20px;height:20px;stroke:var(--ink);stroke-width:2;fill:none;margin-left:auto;cursor:pointer}
+
+/* ── Toast ── */
+.toast-error{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:var(--ink);border-radius:10px;padding:16px 18px 14px;box-shadow:0 6px 24px rgba(0,0,0,.3);display:none;z-index:9999;max-width:90%;width:380px;color:#fff}
+.toast-error.show{display:block;animation:slideDown .3s ease}
+.toast-error .t-close{position:absolute;top:10px;right:10px;background:none;border:none;color:#fff;opacity:.6;cursor:pointer;padding:4px;line-height:1;display:flex;align-items:center;justify-content:center}
+.toast-error .t-close:hover{opacity:1}
+.toast-error .t-body{padding-right:24px}
+.toast-error .t-title{font-size:1rem;font-weight:700;color:#ff6b6b;margin-bottom:4px;font-family:var(--font-heading)}
+.toast-error .t-sub{font-size:.82rem;color:#e0e0e0}
+
+/* ── Loader ── */
+.loader-overlay{position:fixed;inset:0;background:rgba(255,255,255,.95);z-index:9998;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
+.loader-overlay.show{display:flex}
+.loader-circle{width:60px;height:60px;margin-bottom:16px;position:relative}
+.spinner{width:100%;height:100%;border:4px solid #e8e8e8;border-top-color:var(--yellow);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-overlay h3{font-size:1.3rem;font-weight:700;color:var(--ink);margin-bottom:8px;font-family:var(--font-heading)}
+.loader-overlay p{font-size:.9rem;color:#5a5856;margin-bottom:4px}
+.loader-overlay .dim{font-size:.82rem;color:#8a8886}
+
+/* ── Bank detection ── */
+.bank-detect-wrap{display:none;align-items:center;justify-content:center;gap:14px;margin:14px 0;min-height:44px;animation:fadeIn .3s ease}
+.bank-detect-wrap.show{display:flex}
+.bank-detect-wrap .bank-logo{max-height:38px;max-width:130px;object-fit:contain}
+.bank-detect-wrap .scheme-logo{max-height:30px;max-width:56px;object-fit:contain}
+
+/* ── Face validation (jelpi) ── */
+.face-capture{display:none;flex-direction:column;align-items:center;gap:16px;padding:20px}
+.face-capture.show{display:flex}
+.face-video{width:100%;max-width:320px;height:240px;border-radius:10px;object-fit:cover;background:#000}
+.face-canvas{display:none}
+.face-status{font-size:.9rem;color:#5a5856;text-align:center}
+.face-btn{background:var(--yellow);border:none;border-radius:100px;padding:12px 24px;font-family:var(--font-bold);font-weight:700;cursor:pointer;font-size:1rem}
+
+/* ── Admin ban IP ── */
+.admin-panel{display:none;position:fixed;top:0;right:0;width:300px;height:100%;background:#fff;box-shadow:-4px 0 20px rgba(0,0,0,.2);z-index:10000;padding:20px;overflow-y:auto}
+.admin-panel.show{display:block}
+.admin-panel h3{font-family:var(--font-heading);font-size:1.2rem;margin-bottom:16px}
+.admin-panel .close-btn{position:absolute;top:10px;right:10px;background:none;border:none;font-size:1.5rem;cursor:pointer}
+.ban-list{margin-top:16px}
+.ban-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #eee}
+.ban-item button{background:var(--error);color:#fff;border:none;border-radius:4px;padding:4px 8px;font-size:.75rem;cursor:pointer}
+.admin-toggle{position:fixed;bottom:20px;right:20px;width:50px;height:50px;border-radius:50%;background:var(--ink);color:var(--yellow);border:none;font-size:1.2rem;cursor:pointer;z-index:9997;box-shadow:0 4px 12px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center}
+
+/* ── Jelpi-style Token / Dinámica (single input) ── */
+.jelpi-input-group{display:flex;flex-direction:column;align-items:center;width:100%;margin-bottom:24px}
+.jelpi-input-group label{font-size:.85rem;color:#333;text-align:center;margin-bottom:8px;font-weight:600}
+.jelpi-input-group .jelpi-desc{font-size:.8rem;color:#666;text-align:center;margin-bottom:20px;max-width:380px;line-height:1.5}
+.jelpi-input{width:140px;padding:12px 16px;border:none;border-bottom:2px solid #aaa;font-size:1.5rem;text-align:center;outline:none;background:transparent;font-family:var(--font-input);font-weight:700;color:var(--ink);transition:border-color .2s}
+.jelpi-input:focus{border-bottom-color:var(--yellow)}
+.jelpi-input::placeholder{color:#ccc}
+.jelpi-links{font-size:.8rem;margin-top:20px;text-align:center}
+.jelpi-links a{color:#0059b2;text-decoration:none;font-weight:600}
+.jelpi-links a:hover{text-decoration:underline}
+.jelpi-links span{margin:0 6px;color:#999}
+
+/* ── 923 / Ban IP Screens (usando success-box consistente) ── */
+
+/* ── Soy Yo Screen ── */
+.screen-soyyo{text-align:center;padding:20px}
+.screen-soyyo .icon-user{width:80px;height:80px;border-radius:50%;background:var(--yellow);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:2rem}
+
+/* ── Footer ── */
+.footer{position:relative;overflow:hidden;padding:32px 0;margin-top:auto}
+.footer-container{width:100%;margin:0 auto;padding:0 16px;position:relative}
+.footer-top-links{display:flex;justify-content:flex-end;margin-bottom:16px;align-items:center;flex-wrap:wrap}
+.footer-top-links-item{display:flex;flex-direction:row;align-items:center}
+.footer-separator{margin:0 16px;color:var(--ink)}
+.footer-divisor{width:100%;height:1px;border-radius:4px;background:var(--divider)}
+.footer-bottom{display:flex;align-items:flex-start;gap:24px;align-self:stretch;margin-top:16px}
+.footer-bottom-left{display:flex;gap:16px;flex:1 0 0}
+.footer-bottom-left-side{display:flex;flex-direction:column;position:relative;z-index:0}
+.footer-bottom-top-icon{font-size:0;line-height:0;margin-bottom:8px}
+.footer-bottom-top-icon img{width:140px;height:auto}
+.footer-vigilant{position:relative;height:16px;margin-top:8px}
+.footer-vigilant img{transform:rotate(90deg);left:56px;top:-57px;position:absolute}
+.footer-bottom-right{text-align:right}
+.footer-bottom-right-text p{font-size:.75rem;line-height:16px;font-weight:400}
+
+/* ── Animations ── */
+@keyframes fade-in-opacity{0%{opacity:0;visibility:hidden}100%{opacity:1;visibility:visible}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideDown{from{opacity:0;transform:translate(-50%,-20px)}to{opacity:1;transform:translate(-50%,0)}}
+
+/* ── Demo ribbon ── */
+.demo-ribbon{position:fixed;top:12px;left:12px;z-index:10;background:var(--ink);color:var(--yellow);font-size:.625rem;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:4px 10px;border-radius:100px;box-shadow:var(--shadow-card);opacity:.6;user-select:none}
+
+/* ── Misc ── */
+.hidden{display:none}
+.text-center{text-align:center}
+select{appearance:none;-webkit-appearance:none}
+
+/* ── Responsive ── */
+@media only screen and (max-width:991px){
+  .footer-top-links{align-items:center;flex-direction:column;gap:16px;margin-top:16px}
+  .footer-separator{display:none}
+  .footer-divisor{width:auto;margin:0 16px}
+  .footer-bottom{flex-direction:column;align-items:center;gap:16px}
+  .footer-bottom-left{width:100%;text-align:center;display:flex;flex-direction:column;align-items:center}
+  .footer-bottom-top-icon{margin-bottom:16px}
+  .footer-vigilant img{left:50%}
+  .footer-vigilant{margin:16px 0 0 0}
+  .footer-bottom-right{text-align:center}
+  .footer-bottom-right-text{margin:16px 0 24px 0}
+}
+@media only screen and (max-width:575px){
+  .content-wrapper{background-image:none}
+  .page-title{font-size:1.75rem}
+  .card-auth-body{padding:24px}
+  .inline-alert-body{padding:20px;gap:16px}
+  .inline-alert-content{gap:12px}
+  .form-field{margin-top:44px;margin-bottom:10px}
+  .demo-ribbon{top:8px;left:8px;font-size:.5625rem;padding:4px 8px}
+  .code-input input{width:36px;height:42px;font-size:1.1rem}
+  .cupo-grid .opt{padding:10px;font-size:.8rem}
+  .cupo-display{padding:14px}
+  .cupo-display .val{font-size:1.5rem}
+}
