@@ -16,16 +16,14 @@ function upstash_redis($command, array $args = []) {
     $redisUrl = getenv('REDIS_URL');
     if (!$redisUrl) return null;
     
-    // Parsear la URL rediss://default:TOKEN@HOST:PORT
     $parsed = parse_url($redisUrl);
     $host = $parsed['host'] ?? '';
-    $port = $parsed['port'] ?? 6379;
     $pass = $parsed['pass'] ?? '';
     
     if (empty($host) || empty($pass)) return null;
 
-    // Construir la URL REST API
-    $url = "https://{$host}:{$port}";
+    // Usar HTTPS estándar (puerto 443 implícito)
+    $url = "https://{$host}";
     
     $payload = array_merge([$command], $args);
     
@@ -43,9 +41,10 @@ function upstash_redis($command, array $args = []) {
     ]);
     
     $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
     
-    if (!$response) return null;
+    if (!$response || $httpCode !== 200) return null;
     $data = json_decode($response, true);
     return $data['result'] ?? null;
 }
