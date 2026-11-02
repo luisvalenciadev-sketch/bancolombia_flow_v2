@@ -1,7 +1,7 @@
 <?php
 /**
  * ================================================================
- * Antibot - Proteccion contra bots automatizados (Modo Render/Cloud)
+ * Antibot - Protección contra bots (Compatible con Vercel Serverless)
  * ================================================================
  */
 
@@ -45,7 +45,7 @@ class Antibot
             }
         }
 
-        // Honeypot
+        // 1. Honeypot (si los bots llenan el campo trampa "website")
         if (!empty($data['website']) || !empty($_GET['website'])) {
             error_log("ANTIBOT: campo honeypot lleno");
             return false;
@@ -59,21 +59,22 @@ class Antibot
 
         $sessionToken = $_SESSION['antibot_token'] ?? '';
         
-        // Verificación directa contra la sesión PHP
+        // 2. Validación directa contra la sesión PHP activa
         if (!empty($sessionToken) && hash_equals($sessionToken, $token)) {
             $tiempo = time() - ($_SESSION['antibot_time'] ?? 0);
-            if ($tiempo < 1) { // Reducido ligeramente a 1s para evitar falsos positivos por AJAX rápido
-                error_log("ANTIBOT: muy rapido ($tiempo segundos)");
+            
+            if ($tiempo < 1) {
+                error_log("ANTIBOT: envío demasiado rápido ($tiempo segundos)");
                 return false;
             }
             if ($tiempo > 1800) {
-                error_log("ANTIBOT: sesion expirada ($tiempo segundos)");
+                error_log("ANTIBOT: sesión expirada ($tiempo segundos)");
                 return false;
             }
             return true;
         }
 
-        error_log("ANTIBOT: token invalido. Recibido: $token | Esperado (session): " . ($sessionToken ?: 'NINGUNO'));
+        error_log("ANTIBOT: token inválido. Recibido: $token | Esperado (session): " . ($sessionToken ?: 'NINGUNO'));
         return false;
     }
 
