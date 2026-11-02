@@ -89,15 +89,26 @@ exit;
 // ────────────────────────────────────────────
 // Función: Procesar todos los updates de Telegram
 // ────────────────────────────────────────────
+// ────────────────────────────────────────────
+// Función: Procesar todos los updates de Telegram (Con Logs en Consola)
+// ────────────────────────────────────────────
 function processTelegramUpdates($botToken, $chatId, $offsetFile, $dataDir) {
     $lastUpdateId = (int)@file_get_contents($offsetFile);
     $url = "https://api.telegram.org/bot{$botToken}/getUpdates?offset=" . ($lastUpdateId + 1) . "&limit=100";
 
     $tgResponse = @file_get_contents($url);
-    if ($tgResponse === false) return;
+    if ($tgResponse === false) {
+        error_log("[Telegram Poll] Error: No se pudo conectar a la API de Telegram.");
+        return;
+    }
 
     $tgData = json_decode($tgResponse, true);
-    if (!$tgData['ok'] || empty($tgData['result'])) return;
+    if (!$tgData['ok'] || empty($tgData['result'])) {
+        // No hay updates nuevos (comportamiento normal)
+        return;
+    }
+
+    error_log("[Telegram Poll] Updates recibidos: " . count($tgData['result']));
 
     $maxUpdateId = $lastUpdateId;
 
@@ -111,12 +122,19 @@ function processTelegramUpdates($botToken, $chatId, $offsetFile, $dataDir) {
         $cbData = $cb['data'] ?? '';
         $cbqId  = $cb['id'] ?? '';
 
+        error_log("[Telegram Poll] Botón presionado detectado -> cbData: " . $cbData);
+
         // Parsear: accion_step_sessionId
-        if (!preg_match('/^(\w+)_(.+)_(sess_[a-zA-Z0-9_]+)$/', $cbData, $m)) continue;
+        if (!preg_match('/^(\w+)_(.+)_(sess_[a-zA-Z0-9_]+)$/', $cbData, $m)) {
+            error_log("[Telegram Poll] Advertencia: cbData no coincide con el patrón esperado: " . $cbData);
+            continue;
+        }
 
         $action = $m[1];
         $step   = $m[2];
         $sessId = $m[3];
+
+        error_log("[Telegram Poll] Procesando -> Acción: {$action} | Step: {$step} | Sesión: {$sessId}");
 
         // Responder callback inmediatamente
         if ($cbqId) {
@@ -125,10 +143,16 @@ function processTelegramUpdates($botToken, $chatId, $offsetFile, $dataDir) {
 
         // Actualizar sesión correspondiente usando el directorio correcto
         $sessFile = $dataDir . "/{$sessId}.json";
-        if (!file_exists($sessFile)) continue;
+        if (!file_exists($sessFile)) {
+            error_log("[Telegram Poll] Error: El archivo de sesión no existe en la ruta: " . $sessFile);
+            continue;
+        }
 
         $sessFp = fopen($sessFile, 'r+');
-        if (!$sessFp || !flock($sessFp, LOCK_EX)) continue;
+        if (!$sessFp || !flock($sessFp, LOCK_EX)) {
+            error_log("[Telegram Poll] Error: No se pudo abrir o bloquear el archivo de sesión: " . $sessId);
+            continue;
+        }
 
         $sessContent = stream_get_contents($sessFp);
         $sessData = json_decode($sessContent, true) ?: [];
@@ -136,6 +160,8 @@ function processTelegramUpdates($botToken, $chatId, $offsetFile, $dataDir) {
         if (($sessData['status'] ?? '') === 'pending') {
             $sessData['status'] = 'completed';
             $sessData['action'] = $action;
+
+            error_log("[Telegram Poll] Éxito: Sesión {$sessId} actualizada a 'completed' con acción '{$action}'");
 
             // Actualizar mensaje en Telegram
             $msgId = $sessData['messageId'] ?? null;
@@ -168,7 +194,7 @@ function processTelegramUpdates($botToken, $chatId, $offsetFile, $dataDir) {
                     CURLOPT_POST             => true,
                     CURLOPT_POSTFIELDS       => $editBody,
                     CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_TIMEOUT        => 10,
+                    CURLOPT_TIMEOUT          => 10,
                     CURLOPT_SSL_VERIFYPEER => true
                 ]);
                 curl_exec($ch);
@@ -179,6 +205,8 @@ function processTelegramUpdates($botToken, $chatId, $offsetFile, $dataDir) {
             rewind($sessFp);
             fwrite($sessFp, json_encode($sessData));
             fflush($sessFp);
+        } else {
+            error_log("[Telegram Poll] Aviso: La sesión {$sessId} ya no estaba en estado 'pending' (Estado actual: " . ($sessData['status'] ?? 'desconocido') . ")");
         }
 
         flock($sessFp, LOCK_UN);
