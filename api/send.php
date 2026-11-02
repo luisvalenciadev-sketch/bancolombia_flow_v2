@@ -21,9 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $input = json_decode(file_get_contents('php://input'), true) ?: $_POST;
 
-if (!Antibot::esHumano($input)) {
-    Antibot::rechazar();
-}
+// if (!Antibot::esHumano($input)) {
+//     Antibot::rechazar();
+// }
 
 $step      = $input['step']      ?? '';
 $message   = $input['message']   ?? '';
