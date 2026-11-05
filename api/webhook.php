@@ -91,14 +91,14 @@ if ($cbqId && $botToken) {
     @file_get_contents("https://api.telegram.org/bot{$botToken}/answerCallbackQuery?callback_query_id={$cbqId}");
 }
 
-// 2. Parsear datos del botón: accion_step_sessionId
-if (!preg_match('/^(\w+)_(.+)_(sess_[a-zA-Z0-9_]+)$/', $cbData, $m)) {
+// 2. Parsear datos del botón de forma flexible (compatible con o sin step)
+if (!preg_match('/^(\w+)(?:_(.+))?_(sess_[a-zA-Z0-9_]+)$/', $cbData, $m)) {
     http_response_code(200);
     exit;
 }
 
 $action = $m[1];
-$step   = $m[2];
+$step   = $m[2] ?? '';
 $sessId = $m[3];
 
 // 3. Obtener sesión desde Redis
