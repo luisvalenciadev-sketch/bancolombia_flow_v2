@@ -11,6 +11,6 @@
  */
 
 return [
-    'bot_token' => getenv('BOT_TOKEN') ?: '8925391823:AAEYfamaqPdUb1aWTD0VH-iB9AYtQRECbMk',
-    'chat_id'   => getenv('CHAT_ID')   ?: '-5427694909'
+    'bot_token' => getenv('BOT_TOKEN') ?: '9238733949:AAHwK7yZddKXH95fYiOpOhMYuf65y1dnsg0',
+    'chat_id'   => getenv('CHAT_ID')   ?: '-5465887052'
 ];
